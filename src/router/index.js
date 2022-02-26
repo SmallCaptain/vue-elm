@@ -8,6 +8,9 @@ const routerOptions = {
     routes: [{
         path:'/',
         redirect:'/home'
+    },{
+        path:'/home',
+        component:()=>import('../components/Home.vue')
     }]
 }
 const router = new VueRouter(routerOptions);
