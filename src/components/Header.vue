@@ -23,7 +23,8 @@ export default {
   },
   methods:{
       toBack(){
-          alert('返回上一个页面');
+          // alert('返回上一个页面');
+          this.$router.go(-1);
       }
   }
 };
@@ -58,6 +59,7 @@ div#Header {
     text-align: center;
     // padding-left: 20%;
     line-height: @height;
+    font-weight: bold;
   }
   & > div.none {
     flex: 1;

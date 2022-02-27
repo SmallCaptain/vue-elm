@@ -10,6 +10,8 @@ Vue.use(elementUi);
 import router from './router'
 // 读取vuex store配置
 import store from './store'
+// 全局样式的引入
+import '../public/index.css';
 Vue.config.productionTip = false
 
 new Vue({

@@ -5,7 +5,7 @@
       <li v-for="(item, index) in navData" :key="index">
         <div class="content">
           <div class="in">
-            <i @click="toPath(item.path)" :class="item.icon"></i>
+            <i @click="toPath(item.path,index)" :class="item.icon" :style="{color:(item.path===isSelected?'#26ABFF':'#666666')}"></i>
           </div>
           <span>{{ item.name }}</span>
         </div>
@@ -28,25 +28,32 @@ export default {
         {
           name: "搜索",
           icon: "el-icon-search",
-          path:''
+          path:'2'
         },
         {
           name: "订单",
           icon: "el-icon-tickets",
-          path:''
+          path:'3'
         },
         {
           name: "个人",
           icon: "el-icon-s-custom",
-          path:''
+          path:'personal'
         },
       ],
+      // 默认为个人
+      isSelected:'personal'
     };
   },
   methods:{
       toPath(path){
           alert(`将要跳转的路由为${path}`);
+          this.isSelected=path;
       }
+  },
+  mounted(){
+    let path = this.$router.history.current.fullPath.split('/')
+    this.isSelected=path[path.length-1]
   }
 };
 </script>
