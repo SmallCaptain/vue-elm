@@ -1,4 +1,4 @@
-import { Input,Aside, Avatar, Button,Container, Footer, Header, Main,Upload } from 'element-ui';
+import { Switch,Input,Aside, Avatar, Button,Container, Footer, Header, Main,Upload, Alert, Message, } from 'element-ui';
 
 const element = {
     install: function (Vue) {
@@ -11,6 +11,9 @@ const element = {
       Vue.use(Upload)
       Vue.use(Avatar);
       Vue.use(Input);
+      Vue.use(Switch);
+      Vue.use(Alert);
+      Vue.component(Message);
     }
   }
 

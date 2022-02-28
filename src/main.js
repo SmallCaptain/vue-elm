@@ -1,7 +1,10 @@
 import Vue from 'vue'
 import App from './App.vue'
+import axios from './axios/index'
 // 引入elementui 样式
 import 'element-ui/lib/theme-chalk/index.css';
+// 引入Message 组件 挂载
+import { Message } from 'element-ui';
 // 从elementUi文件夹读取配置
 import elementUi from './elementUi';
 // 使用自定义的elementui配置  为了按需导入
@@ -12,10 +15,11 @@ import router from './router'
 import store from './store'
 // 全局样式的引入
 import '../public/index.css';
-Vue.config.productionTip = false
-
+Vue.prototype.$message=Message;
+Vue.config.productionTip = false;
+Vue.prototype.$axios=axios;
 new Vue({
   render: h => h(App),
   router,
-  store
+  store,
 }).$mount('#app')

@@ -6,7 +6,7 @@
       <div @click="toMsg" class="msg">
         <!-- 个人信息 包含头像 以及登录功能 -->
         <div class="photo">
-          <img :src="imageUrl" alt="" />
+          <img :src="imageUrl" crossorigin='anonymous' alt="" />
         </div>
         <div class="func">
           <!-- 后续由后台返回数据名而定 -->
@@ -48,7 +48,8 @@ export default {
   data() {
     return {
       // 头像的路径 后面修改为从后台获取
-      imageUrl: "http://localhost:8080/img/defalut_avatar.ce6f12ea.jpg",
+      // http:\localhost:5115\public\img\defalut_avatar.jpg
+      imageUrl: "http://localhost:5115/public/images/defalut_avatar.jpg",
       isLogin: false,
       user: {},
       assetInfo: [
@@ -124,6 +125,9 @@ div.pernalMsg {
         & > img {
           width: 100%;
           height: 100%;
+          border: 1px solid transparent;
+          border-radius: 100%;
+          overflow: hidden;
         }
       }
       div.func {
