@@ -130,6 +130,13 @@ export default {
                   type: "success",
                 });
                 sessionStorage.setItem("Token", result.data.token);
+                // 整合user 数据给vuex
+                let userData={
+                  username:user.username,
+                  Token:result.data.token,
+                  isLogin:true
+                }
+                this.$store.dispatch('user/setUser',userData)
                 this.$router.replace({
                   path:'home/personal'
                 });
@@ -163,6 +170,9 @@ export default {
       }
     },
   },
+  mounted(){
+    console.log(this.$store);
+  }
 };
 </script>
 
