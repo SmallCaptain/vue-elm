@@ -1,3 +1,5 @@
+ps:仅作个人初学vue后练习vue2 参考vue2-elm 的开源项目 感谢开源大佬~ 
+开源项目地址：https://github.com/bailicangdu/vue2-elm
 # vue_elm
 
 ## Project setup

@@ -3,9 +3,16 @@
 //  左侧icon 功能名称 funcName 跳转的路由名称 pathName
 <template>
   <div class="JumpToFunc">
+    <slot name="methion"></slot>
     <div class="container" @click="toPath(funcData.pathName)">
-      <i id="icon" :style="{color:funcData.color}" :class="funcData.icon"></i>
+      <i
+        id="icon"
+        v-if="funcData.icon !== ''"
+        :style="{ color: funcData.color }"
+        :class="funcData.icon"
+      ></i>
       <span>{{ funcData.funcName }}</span>
+      <slot name="username"></slot>
       <i id="jump" class="el-icon-arrow-right"></i>
     </div>
   </div>
@@ -19,19 +26,21 @@ export default {
       type: Object,
       default: () => {
         return {
-          icon: "el-icon-refresh-left",
+          icon: "",
           funcName: "无数据",
           pathName: "无数据",
-          color:'rgb(102, 102, 102)'
+          color: "rgb(102, 102, 102)",
         };
       },
     },
   },
-  methods:{
-      toPath(pathName){
-          alert('将要跳转的路由为: ',pathName)
-      }
-  }
+  methods: {
+    toPath(pathName) {
+      this.$router.push({
+        name:pathName
+      });
+    },
+  },
 };
 </script>
 
@@ -40,16 +49,17 @@ div.JumpToFunc {
   display: flex;
   justify-content: center;
   flex-direction: column;
-  height: 85px;
   background-color: white;
-  border-bottom: 2px solid #F5F5F5;
+  border-bottom: 2px solid #f5f5f5;
 
   & > div.container {
     display: flex;
-
+    margin-left: 50px;
+    height: 85px;
+    padding: 22px 0px;
+    box-sizing: border-box;
     & > i#icon {
-      margin-left: 50px;
-      flex: 2;
+      flex: 1;
       font-size: 50px;
       line-height: 42px;
     }
@@ -58,7 +68,6 @@ div.JumpToFunc {
       font-size: 32px;
       color: rgb(187, 187, 187);
       line-height: 42px;
-
     }
     & > span {
       flex: 16;
@@ -66,6 +75,32 @@ div.JumpToFunc {
       color: #333;
       font-weight: 400;
     }
+    & > .userNameSlot {
+      position: absolute;
+      left: 500px;
+      max-width: 250px;
+      overflow: hidden;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+      color: #A69999;
+    }
+    & > .methionSlotChage {
+      position: absolute;
+      left: 640px;
+      max-width: 250px;
+      overflow: hidden;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+      color: #A69999;
+    }
+  }
+  & > .methionSlot {
+    background-color: #f5f5f5;
+    font-size: 25px;
+    height: 31px;
+    padding: 19px;
+    padding-left: 52px;
+    color: #666666;
   }
 }
 </style>

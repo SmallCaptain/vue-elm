@@ -90,6 +90,9 @@ export default {
     toMsg() {
       if (this.isLogin) {
         // 已登录、、、
+        this.$router.push({
+          path:'/PerChageUserMsg'
+        })
       } else {
         // 未登录。。。。
         this.$router.push({
@@ -103,20 +106,41 @@ export default {
       this.user.username = this.$store.state.user.user.username;
       console.log(this.$store);
     },
-    toPath(pathName){
-      alert('将要跳转的路由为: ',pathName);
-    }
+    toPath(pathName) {
+      alert("将要跳转的路由为: ", pathName);
+    },
   },
   created() {
     // 从vuex中获取登录状态
     this.auToken();
     // 当在登录状态下时 访问后台获取相关数据 图片+余额信息等
     if (this.isLogin) {
-      console.log('已登录');
+      console.log("已登录");
+      this.$axios
+        .post("user/getUserMsg")
+        .then((result) => {
+          console.log(result);
+          if (result.data.status === 401) {
+            this.$message({
+              message: result.data.msg,
+              type: "error",
+            });
+          }else{//令牌正常
+            this.user.phone=result.data.user.phone ==='无'?this.user.phone:result.data.user.phone;
+            this.user.assetInfo[0].num=result.data.user.money;
+            this.user.assetInfo[1].num=result.data.user.preferential_number;
+            this.user.assetInfo[2].num=result.data.user.integrate;
+            this.imageUrl=result.data.user.img;
+          }
+        })
+        .catch((err) => {
+          console.log(err);
+          this.$message({
+            message: "网络出错啦",
+            type: "error",
+          });
+        });
     }
-  },
-  beforeDestroy() {
-    console.log("组件G了");
   },
 };
 </script>
@@ -159,7 +183,6 @@ div.pernalMsg {
         }
         & > div.phone {
           flex: 1;
-
           & > i {
             color: white;
             font-size: 40px;
@@ -202,11 +225,17 @@ div.pernalMsg {
           text-align: center;
           padding-top: 36px;
           & > span.num {
-            font-size: 55px;
+            font-size: 46px;
             font-weight: bold;
+            max-width: 76%;
+            display: inline-block;
+            overflow: hidden;
+            white-space: nowrap;
+            text-overflow: ellipsis;
+            vertical-align: bottom;
           }
           & > span.unit {
-            font-size: 40px;
+            font-size: 46px;
           }
         }
         & > div.unitName {
