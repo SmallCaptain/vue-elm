@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import App from './App.vue'
 import axios from './axios/index'
+import axiosP from './axios/position.js'
 // 引入elementui 样式
 import 'element-ui/lib/theme-chalk/index.css';
 // 引入Message 组件 挂载
@@ -18,6 +19,8 @@ import '../public/index.css';
 Vue.prototype.$message=Message;
 Vue.config.productionTip = false;
 Vue.prototype.$axios=axios;
+Vue.prototype.$axiosP=axiosP;
+
 new Vue({
   render: h => h(App),
   router,

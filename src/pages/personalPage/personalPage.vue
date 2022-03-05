@@ -82,9 +82,60 @@ export default {
           funcName: "下载饿了么APP",
           pathName: "",
           color: "#4AA5F0",
-        }
+        },
       ],
     };
+  },
+  methods: {
+    async getPosition() {
+      // 先向 vuex 请求数据 注：vuex被设置存储在了sessionStorge中 可以防止切回个人页面多次请求数据
+      console.log(
+        `this.$store.state.chageRecive`,
+        this.$store.state.chageRecive
+      );
+      let area = this.$store.state.chageRecive.nowPosistion.area;
+      if (area === "") {
+        //为空时 说明需要向后台请求数据
+        //直接向 请求接口 请求当前定位信息
+        let data = await new Promise((resolve, reject) => {
+          this.$axiosP
+            .get("v1/cities?type=guess")
+            .then((result) => {
+              console.log("@result", result);
+              resolve(result.data);
+            })
+            .catch((err) => {
+              console.log("@error", err);
+              reject(undefined);
+            });
+        });
+        // 在请求成功后将数据写入vuex 如果不成功 则在间隔5s内 发送数据
+        while (data === undefined) {
+          data = await new Promise((resolve, reject) => {
+            setTimeout(() => {
+              this.$axiosP
+                .get("v1/cities?type=guess")
+                .then((result) => {
+                  console.log("@result", result);
+                  resolve(result.data);
+                })
+                .catch((err) => {
+                  console.log("@error", err);
+                  reject(undefined);
+                });
+            }, 5000);
+          });
+        }
+        // 保证 data不为underfined的前提下 将数据写入vuex  后续再发送城市信息写入数据库
+        if (data !== undefined) {
+          this.$store.dispatch("chageRecive/setNowPosistion", data);
+        }
+      }
+    },
+  },
+  created() {
+    // 进行判断是否需要重新获取定位数据
+    this.getPosition();
   },
 };
 </script>
@@ -105,7 +156,7 @@ export default {
     & > div.func {
       margin-top: 20px;
     }
-    & > div.help{
+    & > div.help {
       margin-top: 20px;
     }
   }

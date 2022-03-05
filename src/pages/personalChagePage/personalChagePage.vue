@@ -65,10 +65,10 @@ export default {
       this.$axios
         .post("/user/getUserMsg")
         .then((result) => {
-          console.log(`后台数据@`,result.data.user );
-          console.log(this);
+          // console.log(`后台数据@`,result.data.user );
+          // console.log(this);
           this.user = result.data.user;
-          console.log(this.user);
+          // console.log(this.user);
         })
         .catch((err) => {
           console.log(err);

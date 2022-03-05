@@ -1,4 +1,5 @@
 // 头部部分 不带搜索框 仅有返回和标签
+// 额外增加文字插槽 和编辑地址部分做出联动
 <template>
   <div id="Header">
     <div class="goBack">
@@ -8,6 +9,7 @@
       {{ fucName }}
     </div>
     <div class="none"></div>
+    <slot name="editSlot"></slot>
   </div>
 </template>
 
@@ -33,6 +35,7 @@ export default {
 <style lang="less" scoped>
 @height: 90px;
 div#Header {
+  position: relative;
   display: flex;
   height: @height;
   background-color: #3190e8;

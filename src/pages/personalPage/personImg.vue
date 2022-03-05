@@ -104,7 +104,6 @@ export default {
     auToken() {
       this.isLogin = this.$store.state.user.user.isLogin;
       this.user.username = this.$store.state.user.user.username;
-      console.log(this.$store);
     },
     toPath(pathName) {
       alert("将要跳转的路由为: ", pathName);
@@ -119,7 +118,7 @@ export default {
       this.$axios
         .post("user/getUserMsg")
         .then((result) => {
-          console.log(result);
+          // console.log(result);
           if (result.data.status === 401) {
             this.$message({
               message: result.data.msg,

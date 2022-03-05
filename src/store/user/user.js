@@ -1,3 +1,4 @@
+// 对user验证的vuex 全局公用
 const option = {
     namespaced: true,
     //业务处理层 可用异步操作

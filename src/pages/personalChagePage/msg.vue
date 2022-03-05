@@ -7,10 +7,13 @@
         <div class="img">
           <el-upload
             class="avatar-uploader"
-            action="https://jsonplaceholder.typicode.com/posts/"
+            action="http://localhost:5115/user/chageAvatar"
             :show-file-list="false"
             :on-success="handleAvatarSuccess"
             :before-upload="beforeAvatarUpload"
+            :headers="{
+                Authorization:token
+              }"
           >
             <img v-if="userCopy.img" :src="userCopy.img" class="avatar" />
             <i v-else class="el-icon-plus avatar-uploader-icon"></i>
@@ -36,10 +39,10 @@ import JumpToFunc from "../../components/JumpToFunc.vue";
 export default {
   components: { JumpToFunc },
   name: "msg",
-  props:{
-      user:{
-          type:Object
-      }
+  props: {
+    user: {
+      type: Object,
+    },
   },
   data() {
     return {
@@ -47,13 +50,13 @@ export default {
       assetInfo: [
         {
           funcName: "用户名",
-          pathName: "",
+          pathName: "chageUserName",
           icon: "",
           color: "",
         },
         {
           funcName: "收货地址",
-          pathName: "",
+          pathName: "receiveAdressChage",
           icon: "",
           color: "",
         },
@@ -61,7 +64,8 @@ export default {
       //头像
       imageUrl: "",
       username: "",
-      userCopy:{}
+      userCopy: {},
+      token: "",
     };
   },
   methods: {
@@ -81,18 +85,23 @@ export default {
       return isJPG && isLt2M;
     },
   },
-  mounted(){
-      this.imageUrl=this.userCopy.img;
-      this.username=this.$store.state.user.user.username;
+  mounted() {
+    this.imageUrl = this.userCopy.img;
+    this.username = this.$store.state.user.user.username;
+    // 获取token
+    let token = this.$store.state.user.user.Token;
+    if (token !== undefined || token !==null) {
+      this.token=`Bearer ${token}`
+    }
   },
-  watch:{
-      user:{
-          handler(){
-              this.userCopy = this.user;
-          },
-        immediate:true
-      }
-  }
+  watch: {
+    user: {
+      handler() {
+        this.userCopy = this.user;
+      },
+      immediate: true,
+    },
+  },
 };
 </script>
 
