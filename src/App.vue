@@ -1,6 +1,6 @@
 <template>
   <transition name="fade">
-    <router-view></router-view>
+    <router-view @touchmove.prevent></router-view>
   </transition>
 </template>
 
@@ -11,14 +11,17 @@ export default {
 </script>
 
 <style lang="less" scoped>
-.fade-enter-active,
-.fade-leave-active {
-  transition: opacity 0.5s;
+.fade-enter,.fade-leave-to{
+  opacity: 0;
+}
+.fade-enter-to,.fade-leave{
+  opacity: 1;
+}
+.fade-leave-active,.fade-enter-active{
+  transition: all 1s;
 }
 .fade-leave-active{
   display: none;
 }
-.fade-enter, .fade-leave-to /* .fade-leave-active below version 2.1.8 */ {
-  opacity: 0;
-}
+
 </style>

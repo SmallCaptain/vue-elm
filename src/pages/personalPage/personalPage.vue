@@ -1,5 +1,5 @@
 <template>
-  <transition name="el-fade-in">
+  <transition name="fade">
     <el-container id="container">
       <el-header style="height: auto">
         <!-- 头部 放置组件 -->
@@ -89,10 +89,7 @@ export default {
   methods: {
     async getPosition() {
       // 先向 vuex 请求数据 注：vuex被设置存储在了sessionStorge中 可以防止切回个人页面多次请求数据
-      console.log(
-        `this.$store.state.chageRecive`,
-        this.$store.state.chageRecive
-      );
+  
       let area = this.$store.state.chageRecive.nowPosistion.area;
       if (area === "") {
         //为空时 说明需要向后台请求数据
@@ -132,10 +129,17 @@ export default {
         }
       }
     },
+    reSetVuxRoute() {
+      //进来后 把vuex中路由信息更新
+      let fullPath = this.$router.history.current.fullPath;
+      let path = fullPath.split("/")[fullPath.split("/").length - 1];
+      this.$store.dispatch("nav/setRouteName", path);
+    },
   },
   created() {
     // 进行判断是否需要重新获取定位数据
     this.getPosition();
+    this.reSetVuxRoute();
   },
 };
 </script>
@@ -160,5 +164,17 @@ export default {
       margin-top: 20px;
     }
   }
+}
+.fade-enter,.fade-leave-to{
+  opacity: 0;
+}
+.fade-enter-to,.fade-leave{
+  opacity: 1;
+}
+.fade-leave-active,.fade-enter-active{
+  transition: all 1s;
+}
+.fade-leave-active{
+  display: none;
 }
 </style>

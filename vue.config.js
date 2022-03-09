@@ -33,5 +33,5 @@ module.exports = {
             prependData: `@import "~@/assets/css/variables.scss";@import "~@/assets/css/mixins.scss";`
           }
         }
-      }
+      },
   }

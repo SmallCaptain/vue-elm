@@ -5,7 +5,9 @@ import axiosP from './axios/position.js'
 // 引入elementui 样式
 import 'element-ui/lib/theme-chalk/index.css';
 // 引入Message 组件 挂载
-import { Message } from 'element-ui';
+import {
+  Message
+} from 'element-ui';
 // 从elementUi文件夹读取配置
 import elementUi from './elementUi';
 // 使用自定义的elementui配置  为了按需导入
@@ -14,12 +16,17 @@ Vue.use(elementUi);
 import router from './router'
 // 读取vuex store配置
 import store from './store'
-// 全局样式的引入
+// 全局样式的引入 swiper组件
 import '../public/index.css';
-Vue.prototype.$message=Message;
+import VueAwesomeSwiper from 'vue-awesome-swiper'
+import 'swiper/css/swiper.css'
+Vue.use(VueAwesomeSwiper);
+// 引入 阿里巴巴矢量库
+import './fonts/font_3234442_7wqyoyysxj3/iconfont.css'
+Vue.prototype.$message = Message;
 Vue.config.productionTip = false;
-Vue.prototype.$axios=axios;
-Vue.prototype.$axiosP=axiosP;
+Vue.prototype.$axios = axios;
+Vue.prototype.$axiosP = axiosP;
 
 new Vue({
   render: h => h(App),

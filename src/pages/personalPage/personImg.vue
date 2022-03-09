@@ -30,7 +30,7 @@
         <!-- 记得添加路由跳转事件 -->
         <li
           v-for="(item, index) in user.assetInfo"
-          @click="toPath(user.assetInfo.path)"
+          @click="toPath(item.path)"
           :key="index"
         >
           <div class="unitNum">
@@ -63,21 +63,22 @@ export default {
             unit: "元",
             num: 0.0,
             color: "#FF9900",
-            path: "",
+            path: "UserWallect",
           },
           {
             name: "我的优惠",
             unit: "个",
             num: 0,
             color: "#FF5F3E",
-            path: "",
+            // path: "UserDiscounts",
+            path:'RedPacket'
           },
           {
             name: "我的积分",
             unit: "分",
             num: 0,
             color: "#69C00B",
-            path: "",
+            path: "UserPoint",
           },
         ],
       },
@@ -106,7 +107,9 @@ export default {
       this.user.username = this.$store.state.user.user.username;
     },
     toPath(pathName) {
-      alert("将要跳转的路由为: ", pathName);
+      this.$router.push({
+          name:pathName
+      });
     },
   },
   created() {
@@ -234,7 +237,7 @@ div.pernalMsg {
             vertical-align: bottom;
           }
           & > span.unit {
-            font-size: 46px;
+            font-size: 25px;
           }
         }
         & > div.unitName {

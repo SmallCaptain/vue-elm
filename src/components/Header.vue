@@ -23,12 +23,12 @@ export default {
       default: "无",
     },
   },
-  methods:{
-      toBack(){
-          // alert('返回上一个页面');
-          this.$router.go(-1);
-      }
-  }
+  methods: {
+    toBack() {
+      // alert('返回上一个页面');
+      this.$router.go(-1);
+    },
+  },
 };
 </script>
 
@@ -43,7 +43,7 @@ div#Header {
     position: relative;
     flex: 1;
 
-    & > i.el-icon-arrow-left{
+    & > i.el-icon-arrow-left {
       position: absolute;
       top: 50%;
       left: 10%;

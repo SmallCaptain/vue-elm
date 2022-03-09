@@ -5,7 +5,13 @@
       <li v-for="(item, index) in navData" :key="index">
         <div class="content">
           <div class="in">
-            <i @click="toPath(item.path,index)" :class="item.icon" :style="{color:(item.path===isSelected?'#26ABFF':'#666666')}"></i>
+            <i
+              @click="toPath(item.path, index)"
+              :class="item.icon"
+              :style="{
+                color: item.path === isSelected ? '#26ABFF' : '#666666',
+              }"
+            ></i>
           </div>
           <span>{{ item.name }}</span>
         </div>
@@ -23,38 +29,51 @@ export default {
         {
           name: "外卖",
           icon: "el-icon-eleme",
-          path:'1'
+          path: "takeout",
         },
         {
           name: "搜索",
           icon: "el-icon-search",
-          path:'2'
+          path: "2",
         },
         {
           name: "订单",
           icon: "el-icon-tickets",
-          path:'3'
+          path: "3",
         },
         {
           name: "个人",
           icon: "el-icon-s-custom",
-          path:'personal'
+          path: "personal",
         },
       ],
-      // 默认为个人
-      isSelected:'personal'
     };
   },
-  methods:{
-      toPath(path){
-          alert(`将要跳转的路由为${path}`);
-          this.isSelected=path;
-      }
+  computed: {
+    isSelected: {
+      get() {
+        return this.$store.state.nav.routeName;
+      },
+      set(data) {
+        console.log(data);
+      },
+    },
   },
-  mounted(){
-    let path = this.$router.history.current.fullPath.split('/')
-    this.isSelected=path[path.length-1]
-  }
+  methods: {
+    toPath(path) {
+      let routeName = this.$store.state.nav.routeName;
+      if (routeName !== path) {
+        this.$store.dispatch("nav/setRouteName", path);
+        this.$router.push({
+          name: path,
+        });
+      }
+    },
+  },
+  created() {
+    let path = this.$store.state.nav.routeName;
+    this.isSelected = path;
+  },
 };
 </script>
 

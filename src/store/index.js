@@ -2,13 +2,15 @@ import Vue from 'vue';
 import Vuex from 'vuex';
 import user from './user/user.js';
 import chageRecive from './chageRecive/chageRecive.js'
+import nav from './nav/index.js'
 import createPersistedState from 'vuex-persistedstate' //在此引入
 Vue.use(Vuex);
 
 const store = new Vuex.Store({
     modules: {
         user,
-        chageRecive
+        chageRecive,
+        nav
     },
     plugins: [createPersistedState({
         // 默认存储在localStorage 现改为sessionStorage

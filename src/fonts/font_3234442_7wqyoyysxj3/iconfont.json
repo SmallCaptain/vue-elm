@@ -1,0 +1,16 @@
+{
+  "id": "3234442",
+  "name": "elm练习 开源项目",
+  "font_family": "iconfont",
+  "css_prefix_text": "icon-",
+  "description": "",
+  "glyphs": [
+    {
+      "icon_id": "8450597",
+      "name": "star",
+      "font_class": "star",
+      "unicode": "e61a",
+      "unicode_decimal": 58906
+    }
+  ]
+}
