@@ -111,8 +111,7 @@ export default {
     },
     login() {
       // 第一层判断 验证码是否正确
-      if (this.validCode === this.vericode) {
-        console.log("验证1码正确");
+      if (this.validCode.toLowerCase()=== this.vericode.toLowerCase()) {
         let user = {
           username: this.username.replace(/\s+/g,''),
           password: this.password.replace(/\s+/g,''),

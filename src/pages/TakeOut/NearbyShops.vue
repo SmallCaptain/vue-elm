@@ -75,7 +75,12 @@ export default {
   },
   methods: {
     toShop() {
-      alert("路由会跳转");
+      this.$router.push({
+        name:'Merchant',
+        query:{
+          id:this.item.id
+        }
+      });
     },
   },
   computed: {

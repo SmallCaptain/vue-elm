@@ -77,6 +77,16 @@ const routerOptions = {
                 path: 'redPacket',
                 component: () => import('../pages/UserDiscounts/RedPacket/RedPacket.vue')
             }]
+        }, //商家页面
+        {
+            name: 'Merchant',
+            path: '/merchant',
+            component: () => import('../pages/merchant/Merchant.vue'),
+            props: (route) => {
+                return {
+                    id: route.query.id
+                };
+            }
         }
     ]
 }

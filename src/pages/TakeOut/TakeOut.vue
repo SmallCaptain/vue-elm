@@ -1,38 +1,45 @@
 <template>
-  <el-container class="TakeOut">
-    <el-header>
-      <HeaderSearch :Area="Area" :Personal="Personal" :Search="Search" />
-    </el-header>
-    <el-main>
-      <!-- 第一块滑动图 -->
-      <div class="ShopSwiper">
-        <swiper ref="mySwiper" :options="swiperOptions">
-          <swiper-slide v-for="(item, index) in swiperData" :key="index">
-            <shop-image
-              v-for="(item2, index2) in item"
-              :key="index2"
-              :item="item2"
+  <transition name="fade">
+    <el-container class="TakeOut">
+      <el-header>
+        <HeaderSearch :Area="Area" :Personal="Personal" :Search="Search" />
+      </el-header>
+      <el-main>
+        <!-- 第一块滑动图 -->
+        <div class="ShopSwiper">
+          <swiper ref="mySwiper" :options="swiperOptions">
+            <swiper-slide v-for="(item, index) in swiperData" :key="index">
+              <shop-image
+                v-for="(item2, index2) in item"
+                :key="index2"
+                :item="item2"
+              />
+            </swiper-slide>
+            <template v-slot:pagination>
+              <div class="swiper-pagination"></div>
+            </template>
+          </swiper>
+        </div>
+        <!-- 附近商家 -->
+        <div class="storer">
+          <div class="methion">
+            <i class="el-icon-s-shop"></i>
+            <span>附近商家</span>
+          </div>
+          <!-- 商家大全 -->
+          <div class="stores">
+            <nearby-shops
+              v-for="(item, index) in storeData"
+              :key="index"
+              :item="item"
             />
-          </swiper-slide>
-          <template v-slot:pagination>
-            <div class="swiper-pagination"></div>
-          </template>
-        </swiper>
-      </div>
-      <!-- 附近商家 -->
-      <div class="storer">
-        <div class="methion">
-          <i class="el-icon-s-shop"></i>
-          <span>附近商家</span>
+          </div>
         </div>
-        <!-- 商家大全 -->
-        <div class="stores">
-          <nearby-shops v-for="(item,index) in storeData" :key="index" :item="item"  />
-        </div>
-      </div>
-    </el-main>
-  </el-container>
+      </el-main>
+    </el-container>
+  </transition>
 </template>
+
 
 <script>
 import HeaderSearch from "../../components/HeaderSearch.vue";
@@ -173,17 +180,17 @@ export default {
           })
           .catch((err) => {
             console.log(err);
-            reject(null)
+            reject(null);
           });
       });
-      if(data){
+      if (data) {
         // 不为null 有数据
         // console.log(data);
         this.storeData = data.data;
-      }else{
+      } else {
         this.$message({
-          type:'error',
-          message:'获取商家数据失败'
+          type: "error",
+          message: "获取商家数据失败",
         });
       }
     },
@@ -201,6 +208,7 @@ export default {
 
 <style lang="less" scoped>
 .TakeOut {
+  margin-bottom: 80px;
   & > .el-header {
     padding: 0;
     height: auto !important;
@@ -239,5 +247,19 @@ export default {
       }
     }
   }
+}
+.fade-enter-active{
+  animation: fadeIn 1s;
+}
+.fade-leave-active{
+  display: none;
+}
+@keyframes fadeIn {
+    0%{
+      opacity: 0;
+    }
+    100%{
+      opacity: 1;
+    }
 }
 </style>
