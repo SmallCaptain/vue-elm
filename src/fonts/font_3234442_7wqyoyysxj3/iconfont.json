@@ -6,6 +6,13 @@
   "description": "",
   "glyphs": [
     {
+      "icon_id": "88228",
+      "name": "购物车-选中",
+      "font_class": "gouwuchexuanzhong",
+      "unicode": "e600",
+      "unicode_decimal": 58880
+    },
+    {
       "icon_id": "8450597",
       "name": "star",
       "font_class": "star",

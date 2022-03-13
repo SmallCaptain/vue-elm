@@ -19,11 +19,11 @@ export default {
 .fade-leave {
   opacity: 1;
 }
-.fade-leave-active,
 .fade-enter-active {
-  transition: all 1s;
+  transition: all 0.5s;
 }
 .fade-leave-active {
   display: none;
+  transition: all 0.5s;
 }
 </style>

@@ -53,7 +53,7 @@ export default {
     return {
       // 头像的路径 后面修改为从后台获取
       // http:\localhost:5115\public\img\defalut_avatar.jpg
-      imageUrl: "http://localhost:5115/public/images/defalut_avatar.jpg",
+      imageUrl: require("@/images/defalut_avatar.jpg"),
       user: {
         username: "",
         phone: "暂未绑定手机号",

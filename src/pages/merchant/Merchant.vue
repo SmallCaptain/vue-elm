@@ -9,7 +9,7 @@
     <el-main>
       <keep-alive>
         <transition name="fade">
-          <component :is="componentTag"></component>
+          <component :storeId="id" :is="componentTag"></component>
         </transition>
       </keep-alive>
     </el-main>
@@ -45,6 +45,8 @@ export default {
 
 <style lang="less" scoped>
 #merchant {
+  display: flex;
+  height: 100vh;
   & > .el-header {
     height: auto !important;
     padding: 0;
@@ -63,7 +65,7 @@ export default {
 }
 .fade-leave-active,
 .fade-enter-active {
-  transition: all 1s;
+  transition: all 0.3s;
 }
 .fade-leave-active {
   display: none;
