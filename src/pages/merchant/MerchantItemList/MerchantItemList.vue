@@ -24,11 +24,16 @@
         :key="index"
         @selectShops="selectShops"
         @delShops="delShops"
+        :selectData="selectData"
       />
     </div>
     <!-- //购物车 -->
     <footer>
-      <shopping-cart />
+      <shopping-cart
+        @selectShops="selectShops"
+        @delShops="delShops"
+        :selectData="selectData"
+      />
     </footer>
   </div>
 </template>
@@ -59,7 +64,7 @@ export default {
               id: "1",
               name: "阿尔卑斯",
               type: "热销榜",
-              price: 20.5,
+              price: 2.5,
               introduction: "好吃！",
               sales: 100,
               point: 30.5,
@@ -77,7 +82,7 @@ export default {
               sales: 100,
               point: 30.5,
               label: "冰淇淋呢",
-              is_specialty: 1,
+              is_specialty: 0,
               is_new_product: 1,
               img: "http://localhost:5115/public/images/iceCream.jpg",
             },
@@ -91,7 +96,7 @@ export default {
               point: 30.5,
               label: "冰淇淋",
               is_specialty: 1,
-              is_new_product: 1,
+              is_new_product: 0,
               img: "http://localhost:5115/public/images/iceCream.jpg",
             },
             {
@@ -103,8 +108,8 @@ export default {
               sales: 100,
               point: 30.5,
               label: "冰淇淋",
-              is_specialty: 1,
-              is_new_product: 1,
+              is_specialty: 0,
+              is_new_product: 0,
               img: "http://localhost:5115/public/images/iceCream.jpg",
             },
             {
@@ -265,6 +270,7 @@ export default {
         }
       }
     },
+
   },
   mounted() {
     // 初始化navDataTop

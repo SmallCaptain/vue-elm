@@ -103,6 +103,7 @@ export default {
             })
             .catch((err) => {
               console.log("@error", err);
+              alert('定位炸啦！')
               reject(undefined);
             });
         });
