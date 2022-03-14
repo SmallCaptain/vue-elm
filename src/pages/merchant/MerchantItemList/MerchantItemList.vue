@@ -140,6 +140,91 @@ export default {
             },
           ],
         },
+        {
+          name: "折扣榜",
+          counts: 0,
+          //items数据从后端拿取 name和counts前端这边自行维护
+          items: [
+            {
+              id: "7",
+              name: "阿尔卑斯",
+              type: "折扣榜",
+              price: 2.5,
+              introduction: "好吃！",
+              sales: 100,
+              point: 30.5,
+              label: "冰淇淋",
+              is_specialty: 1,
+              is_new_product: 1,
+              img: "http://localhost:5115/public/images/iceCream.jpg",
+            },
+            {
+              id: "8",
+              name: "阿尔卑斯",
+              type: "折扣榜",
+              price: 20.5,
+              introduction: "好吃！",
+              sales: 100,
+              point: 30.5,
+              label: "冰淇淋呢",
+              is_specialty: 0,
+              is_new_product: 1,
+              img: "http://localhost:5115/public/images/iceCream.jpg",
+            },
+            {
+              id: "9",
+              name: "阿尔卑斯",
+              type: "折扣榜",
+              price: 20.5,
+              introduction: "好吃！",
+              sales: 100,
+              point: 30.5,
+              label: "冰淇淋",
+              is_specialty: 1,
+              is_new_product: 0,
+              img: "http://localhost:5115/public/images/iceCream.jpg",
+            },
+            {
+              id: "10",
+              name: "阿尔卑斯",
+              type: "折扣榜",
+              price: 20.5,
+              introduction: "好吃！",
+              sales: 100,
+              point: 30.5,
+              label: "冰淇淋",
+              is_specialty: 0,
+              is_new_product: 0,
+              img: "http://localhost:5115/public/images/iceCream.jpg",
+            },
+            {
+              id: "11",
+              name: "阿尔卑斯",
+              type: "折扣榜",
+              price: 20.5,
+              introduction: "好吃！",
+              sales: 100,
+              point: 30.5,
+              label: "冰淇淋",
+              is_specialty: 1,
+              is_new_product: 1,
+              img: "http://localhost:5115/public/images/iceCream.jpg",
+            },
+            {
+              id: "12",
+              name: "阿尔卑斯",
+              type: "折扣榜",
+              price: 20.5,
+              introduction: "好吃！",
+              sales: 100,
+              point: 30.5,
+              label: "冰淇淋",
+              is_specialty: 1,
+              is_new_product: 1,
+              img: "http://localhost:5115/public/images/iceCream.jpg",
+            },
+          ],
+        },
       ],
       // 用于存储当前已选择了的商品
       selectData: [],
@@ -203,7 +288,7 @@ export default {
       let index = -1;
       //每次只取单个商品
       for (let i = 0; i < this.selectData.length; i++) {
-        if (this.selectData[i].item.id === data.id) {
+        if (this.selectData[i].item.id === data.id && (this.selectData[i].item.type === data.type)) {
           flag = true;
           index = i;
           break;
@@ -238,7 +323,7 @@ export default {
       let flag = false;
       let index = -1;
       for (let i = 0; i < this.selectData.length; i++) {
-        if (this.selectData[i].item.id === obj.id) {
+        if (this.selectData[i].item.id === obj.id &&(this.selectData[i].item.type === obj.type)) {
           //判断是否含有该商品
           flag = true;
           index = i;
@@ -250,7 +335,7 @@ export default {
         let counts = this.selectData[index].counts;
 
         if (counts === 1) {
-          //现在等于1 说明 得删掉了。。删后为0
+          //现在等于1 说明 得删掉了。。删后为0 BUG！！！
           this.selectData = this.selectData.filter((dObj) => {
             return dObj.item.id !== obj.id;
           });
@@ -270,7 +355,6 @@ export default {
         }
       }
     },
-
   },
   mounted() {
     // 初始化navDataTop

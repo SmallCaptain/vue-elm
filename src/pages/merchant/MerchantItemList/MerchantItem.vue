@@ -141,7 +141,10 @@ export default {
             let findFlag = false; //默认没找到
 
             for (let j = 0; j < newValue.length; j++) {
-              if (oldValue[i].item.id === newValue[j].item.id) {
+              if (
+                oldValue[i].item.id === newValue[j].item.id &&
+                oldValue[i].item.type === newValue[j].item.type
+              ) {
                 findFlag = true;
                 break;
               }
@@ -162,11 +165,11 @@ export default {
         } else if (newValue.length === oldValue.length) {
           //反之 这里不可能出现 > 的情况 只有等于的情况
           //该情况下 需要检测 到底是哪一个数据发生了变化
-     
+
           let id = null; //商品id
           let type = null;
           let index = 0;
-          let rI=0;
+          let rI = 0;
           for (let i = 0; i < oldValue.length; i++) {
             let findFlag = false; //默认没找到
 
@@ -192,7 +195,7 @@ export default {
               break;
             }
           }
-       
+
           if (id !== null && type === this.data.name) {
             //查找到了数量发生了变化的那个商品 并且它的分类是属于本组的
             this.selecteds[index] = newValue[rI].counts;
