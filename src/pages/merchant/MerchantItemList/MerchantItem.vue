@@ -2,11 +2,11 @@
   <div class="item">
     <!-- 第一个部分 分类 热销榜等 -->
     <div class="type">
-      <span>{{ data.name }}</span>
+      <span>{{ datas.name }}</span>
     </div>
     <!-- 第二个部分 对应分类的多物品 -->
     <ul class="items">
-      <li v-for="(item, index) in data.items" :key="index">
+      <li v-for="(item, index) in datas.items" :key="index">
         <div class="liContent">
           <div class="img">
             <img :src="item.img" alt="" />
@@ -60,7 +60,7 @@
 export default {
   name: "MerchantItem",
   props: {
-    data: {
+    datas: {
       type: Object,
       default() {
         return {
@@ -93,21 +93,21 @@ export default {
       //挑选商品
       this.isButtonOn = true;
       this.selecteds[index]++;
-      this.$emit("selectShops", this.data.items[index], index);
+      this.$emit("selectShops", this.datas.items[index], index);
       this.$forceUpdate();
     },
     increItem(index) {
       this.isButtonOn = true;
 
       this.selecteds[index] === 0 ? 0 : this.selecteds[index]--;
-      this.$emit("delShops", this.data.items[index]);
+      this.$emit("delShops", this.datas.items[index]);
       this.$forceUpdate();
     },
     //初始化 selecteds
     initSelecteds() {
       // 针对多少个物品 给选择量推入0(初始化选择数组)
       let newArray = [];
-      this.data.items.forEach(() => {
+      this.datas.items.forEach(() => {
         newArray.push(0);
       });
       this.selecteds = newArray;
@@ -130,79 +130,91 @@ export default {
   // 监听购物车数据
   watch: {
     selectDataComputed(newValue, oldValue) {
-      if (!this.isButtonOn) {
-        //购物车触发时
-        if (newValue < oldValue) {
-          //差距只有1 说明有单个商品归为0
-          let id = null; //商品id 挑选出没有的
-          let type = null;
-          let index = 0;
-          for (let i = 0; i < oldValue.length; i++) {
-            let findFlag = false; //默认没找到
+    
+      let grap = Math.abs(oldValue.length - newValue.length);
 
-            for (let j = 0; j < newValue.length; j++) {
-              if (
-                oldValue[i].item.id === newValue[j].item.id &&
-                oldValue[i].item.type === newValue[j].item.type
-              ) {
-                findFlag = true;
+      if (grap > 1) {//说明是全部清空
+        let arr = [];
+        this.selecteds.forEach(() =>{
+          arr.push(0);
+        });
+        this.selecteds = arr;
+      } else {
+        if (!this.isButtonOn) {
+          //购物车触发时
+          if (newValue < oldValue) {
+            //差距只有1 说明有单个商品归为0
+            let id = null; //商品id 挑选出没有的
+            let type = null;
+            let index = 0;
+            for (let i = 0; i < oldValue.length; i++) {
+              let findFlag = false; //默认没找到
+
+              for (let j = 0; j < newValue.length; j++) {
+                if (
+                  oldValue[i].item.id === newValue[j].item.id &&
+                  oldValue[i].item.type === newValue[j].item.type
+                ) {
+                  findFlag = true;
+                  break;
+                }
+              }
+              if (!findFlag) {
+                //说明被删的 就是这个
+                id = oldValue[i].item.id;
+                type = oldValue[i].item.type;
+                index = oldValue[i].index;
                 break;
               }
             }
-            if (!findFlag) {
-              //说明被删的 就是这个
-              id = oldValue[i].item.id;
-              type = oldValue[i].item.type;
-              index = oldValue[i].index;
-              break;
+            if (id !== null && type === this.datas.name) {
+              //查找到了已经删掉的那个商品 并且它的分类是属于本组的
+              this.selecteds[index] = 0;
+              this.$forceUpdate();
             }
-          }
-          if (id !== null && type === this.data.name) {
-            //查找到了已经删掉的那个商品 并且它的分类是属于本组的
-            this.selecteds[index] = 0;
-            this.$forceUpdate();
-          }
-        } else if (newValue.length === oldValue.length) {
-          //反之 这里不可能出现 > 的情况 只有等于的情况
-          //该情况下 需要检测 到底是哪一个数据发生了变化
+          } else if (newValue.length === oldValue.length) {
+            //反之 这里不可能出现 > 的情况 只有等于的情况
+            //该情况下 需要检测 到底是哪一个数据发生了变化
 
-          let id = null; //商品id
-          let type = null;
-          let index = 0;
-          let rI = 0;
-          for (let i = 0; i < oldValue.length; i++) {
-            let findFlag = false; //默认没找到
+            let id = null; //商品id
+            let type = null;
+            let index = 0;
+            let rI = 0;
+            for (let i = 0; i < oldValue.length; i++) {
+              let findFlag = false; //默认没找到
 
-            for (let j = 0; j < newValue.length; j++) {
-              if (oldValue[i].item.type === newValue[j].item.type) {
-                //同种类型
-                if (oldValue[i].item.id === newValue[j].item.id) {
-                  //商品一致
-                  if (oldValue[i].counts !== newValue[j].counts) {
-                    // 数量发生改变
-                    findFlag = true;
-                    break;
+              for (let j = 0; j < newValue.length; j++) {
+                if (oldValue[i].item.type === newValue[j].item.type) {
+                  //同种类型
+                  if (oldValue[i].item.id === newValue[j].item.id) {
+                    //商品一致
+                    if (oldValue[i].counts !== newValue[j].counts) {
+                      // 数量发生改变
+                      findFlag = true;
+                      break;
+                    }
                   }
                 }
               }
+              if (findFlag) {
+                //说明这个是数量变化的商品
+                id = oldValue[i].item.id;
+                type = oldValue[i].item.type;
+                index = oldValue[i].index;
+                rI = i;
+                break;
+              }
             }
-            if (findFlag) {
-              //说明这个是数量变化的商品
-              id = oldValue[i].item.id;
-              type = oldValue[i].item.type;
-              index = oldValue[i].index;
-              rI = i;
-              break;
-            }
-          }
 
-          if (id !== null && type === this.data.name) {
-            //查找到了数量发生了变化的那个商品 并且它的分类是属于本组的
-            this.selecteds[index] = newValue[rI].counts;
-            this.$forceUpdate();
+            if (id !== null && type === this.datas.name) {
+              //查找到了数量发生了变化的那个商品 并且它的分类是属于本组的
+              this.selecteds[index] = newValue[rI].counts;
+              this.$forceUpdate();
+            }
           }
         }
       }
+
       // 结束后恢复为购物车触发
       this.isButtonOn = false;
     },

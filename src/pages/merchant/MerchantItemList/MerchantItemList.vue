@@ -19,7 +19,7 @@
     <div @touchstart="mainTouch" @scroll="mainScroll($event)" class="main">
       <merchant-item
         ref="items"
-        :data="item"
+        :datas="item"
         v-for="(item, index) in itemData"
         :key="index"
         @selectShops="selectShops"
@@ -33,6 +33,7 @@
         @selectShops="selectShops"
         @delShops="delShops"
         :selectData="selectData"
+        @clearCarts="clearCarts"
       />
     </footer>
   </div>
@@ -355,6 +356,16 @@ export default {
         }
       }
     },
+    // 清空购物车
+    clearCarts(){
+      this.selectData = [];
+      let newArray = [];
+      this.itemData.forEach(obj=>{
+        obj.counts = 0;
+        newArray.push(obj);
+      })
+      this.itemData = newArray;
+    }
   },
   mounted() {
     // 初始化navDataTop

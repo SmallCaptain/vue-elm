@@ -126,6 +126,7 @@ export default {
     clearCarts(){
       // 直接把购物车中每一个按钮都触发掉
       console.log('清空');
+      this.$emit('clearCarts')
     }
   },
   computed: {
