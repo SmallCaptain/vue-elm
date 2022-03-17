@@ -75,10 +75,12 @@ export default {
   },
   methods: {
     toShop() {
+      let data = JSON.stringify(this.item);
       this.$router.push({
         name:'Merchant',
         query:{
-          id:this.item.id
+          id:this.item.id,
+          item:data
         }
       });
     },

@@ -200,9 +200,7 @@ export default {
     this.setArea();
     this.getStoreData();
   },
-  mounted() {
-    console.log(this.$refs.swiper);
-  },
+
 };
 </script>
 

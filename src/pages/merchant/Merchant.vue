@@ -2,14 +2,14 @@
   <el-container id="merchant">
     <el-header>
       <!-- header部分 -->
-      <merchant-header />
+      <merchant-header :item = "itemObj" />
       <!-- 导航条部分 -->
       <merchant-nav @chageShow="chageShow" />
     </el-header>
     <el-main>
       <keep-alive>
         <transition name="fade">
-          <component :storeId="id" :is="componentTag"></component>
+          <component :itemObj ="itemObj" :storeId="id" :is="componentTag"></component>
         </transition>
       </keep-alive>
     </el-main>
@@ -27,6 +27,9 @@ export default {
     id: {
       type: String,
     },
+    itemObj:{
+      type:Object
+    }
   },
   data() {
     return {

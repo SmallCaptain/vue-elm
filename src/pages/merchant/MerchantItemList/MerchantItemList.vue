@@ -34,6 +34,7 @@
         @delShops="delShops"
         :selectData="selectData"
         @clearCarts="clearCarts"
+        :shippingFee="itemObj.shipping_fee"
       />
     </footer>
   </div>
@@ -52,6 +53,9 @@ export default {
     storeId: {
       type: String,
     },
+    itemObj:{
+      type:Object
+    }
   },
   data() {
     return {
@@ -237,13 +241,13 @@ export default {
       mainScrollTop: 0, //卷尺高度？
       mainTrigger: 0, // 0 表示用户触发 1表示程序触发
       delTop: 0,
-      mainHeight: 0, //设备可用高度 delTop巧妙得取到了目前顶部导航栏的高度
     };
   },
   methods: {
     chageMain(index) {
       this.mainTrigger = 1;
       this.currentIndex = index;
+      this.mainScrollTop = this.itemDataTop[index];
       let main = document.querySelector("div.main");
       main.scrollTo({
         top: this.itemDataTop[index],
@@ -289,7 +293,10 @@ export default {
       let index = -1;
       //每次只取单个商品
       for (let i = 0; i < this.selectData.length; i++) {
-        if (this.selectData[i].item.id === data.id && (this.selectData[i].item.type === data.type)) {
+        if (
+          this.selectData[i].item.id === data.id &&
+          this.selectData[i].item.type === data.type
+        ) {
           flag = true;
           index = i;
           break;
@@ -324,7 +331,10 @@ export default {
       let flag = false;
       let index = -1;
       for (let i = 0; i < this.selectData.length; i++) {
-        if (this.selectData[i].item.id === obj.id &&(this.selectData[i].item.type === obj.type)) {
+        if (
+          this.selectData[i].item.id === obj.id &&
+          this.selectData[i].item.type === obj.type
+        ) {
           //判断是否含有该商品
           flag = true;
           index = i;
@@ -357,21 +367,53 @@ export default {
       }
     },
     // 清空购物车
-    clearCarts(){
+    clearCarts() {
       this.selectData = [];
       let newArray = [];
-      this.itemData.forEach(obj=>{
+      this.itemData.forEach((obj) => {
         obj.counts = 0;
         newArray.push(obj);
-      })
+      });
       this.itemData = newArray;
-    }
+    },
+    //请求后端获取商品数据
+    async getItems() {
+      let data = await new Promise((resolve, reject) => {
+        this.$axios
+          .post("/merchant/getStoreItems", {
+            id: this.storeId,
+          })
+          .then((result) => {
+            resolve(result.data);
+          })
+          .catch((err) => {
+            console.log(err);
+            reject(null);
+          });
+      });
+      if (data.length !== 0 && data instanceof Array) {
+        let itemsData = [];
+        data.forEach((item) => {
+          let obj = {};
+          obj.name = item[0].type;
+          obj.counts = 0;
+          obj.items = item;
+
+          itemsData.push(obj);
+        });
+        this.itemData = itemsData;
+      }
+      this.$nextTick(() => {
+        // 初始化navDataTop
+        this.initNavDataTop();
+        // 初始化itemDataTop
+        this.initItemDataTop();
+      });
+    },
   },
   mounted() {
-    // 初始化navDataTop
-    this.initNavDataTop();
-    // 初始化itemDataTop
-    this.initItemDataTop();
+    this.getItems();
+
   },
   watch: {
     currentIndex(newValue) {

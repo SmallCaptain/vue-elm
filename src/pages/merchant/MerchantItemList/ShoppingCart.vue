@@ -36,7 +36,10 @@
 
     <!-- 隐藏已选购物物品 -->
     <transition name="moveIn">
-      <div v-if="shopCart && selectData.length!==0" class="shoppingCartContent">
+      <div
+        v-if="shopCart && selectData.length !== 0"
+        class="shoppingCartContent"
+      >
         <div class="content">
           <!-- 删除与标题 -->
           <div class="CartName">
@@ -60,7 +63,10 @@
                 <transition name="icrement">
                   <div class="left">
                     <!-- 减 - 以及数量显示 -->
-                    <button  @click="icreItem(item.item)" ref="increBtn"></button>
+                    <button
+                      @click="icreItem(item.item)"
+                      ref="increBtn"
+                    ></button>
                     <span>{{ item.counts }}</span>
                   </div>
                 </transition>
@@ -79,7 +85,7 @@
       </div>
     </transition>
     <!-- 遮挡层 -->
-    <div v-show="shopCart && selectData.length!==0" class="zhedang"></div>
+    <div v-show="shopCart && selectData.length !== 0" class="zhedang"></div>
   </div>
 </template>
 
@@ -120,14 +126,14 @@ export default {
     },
     //购物车删除物品
     icreItem(item) {
-      this.$emit('delShops',item)
+      this.$emit("delShops", item);
     },
     // 清空
-    clearCarts(){
+    clearCarts() {
       // 直接把购物车中每一个按钮都触发掉
-      console.log('清空');
-      this.$emit('clearCarts')
-    }
+      console.log("清空");
+      this.$emit("clearCarts");
+    },
   },
   computed: {
     selectDataCounts() {
@@ -172,11 +178,11 @@ export default {
         }
       }
     },
-    selectData(newValue){
+    selectData(newValue) {
       if (newValue.length === 0) {
         this.shopCart = false;
       }
-    }
+    },
   },
 };
 </script>
@@ -318,6 +324,7 @@ div#ShoppingCart {
     bottom: 95px;
     left: 0;
     z-index: 11;
+
     & > div.content {
       & > div.CartName {
         display: flex;
@@ -335,6 +342,8 @@ div#ShoppingCart {
         }
       }
       & > div.cartItem {
+        max-height: 50vh;
+        overflow-y: auto;
         background-color: white;
         & > div.item {
           display: flex;

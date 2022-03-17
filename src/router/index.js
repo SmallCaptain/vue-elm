@@ -83,8 +83,11 @@ const routerOptions = {
             path: '/merchant',
             component: () => import('../pages/merchant/Merchant.vue'),
             props: (route) => {
+                let item = JSON.parse(route.query.item);
+                console.log(item);
                 return {
-                    id: route.query.id
+                    id: route.query.id,
+                    itemObj:item
                 };
             }
         }
