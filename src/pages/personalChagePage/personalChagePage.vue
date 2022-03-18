@@ -3,7 +3,7 @@
     <el-header> <Header :fucName="func.funcName" /> </el-header>
     <el-main>
       <div class="msg">
-        <Msg :user="user" />
+        <Msg @updateImg="updateImg" :user="user" />
       </div>
       <div class="phone">
         <jump-to-func :funcData="assectInfo[0]">
@@ -74,6 +74,9 @@ export default {
           console.log(err);
         });
     },
+    updateImg(src){
+      this.$set(this.user,'img',src)
+    }
   },
 };
 </script>

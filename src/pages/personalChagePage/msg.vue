@@ -70,6 +70,16 @@ export default {
   },
   methods: {
     handleAvatarSuccess(res, file) {
+      if(res.status === 200){
+        // this.$set(this.userCopy,'img',res.src)
+        this.$emit('updateImg',res.src);
+        this.$router.go(0);
+      }else{
+        this.$message({
+          type:'error',
+          message:res.msg
+        })
+      }
       this.imageUrl = URL.createObjectURL(file.raw);
     },
     beforeAvatarUpload(file) {
@@ -128,6 +138,7 @@ div#msg {
       & > div.img {
         display: flex;
         img.avatar {
+          width: 100px !important;
           height: 100px !important;
           border: 1px solid transparent;
           border-radius: 100%;

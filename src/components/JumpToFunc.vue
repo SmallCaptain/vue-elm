@@ -77,7 +77,8 @@ div.JumpToFunc {
     }
     & > .userNameSlot {
       position: absolute;
-      left: 500px;
+      right: 8vw;
+      line-height: 40px;
       max-width: 250px;
       overflow: hidden;
       white-space: nowrap;
