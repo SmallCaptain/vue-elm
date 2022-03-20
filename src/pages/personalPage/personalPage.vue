@@ -119,6 +119,7 @@ export default {
                 })
                 .catch((err) => {
                   console.log("@error", err);
+                  alert(err);
                   reject(undefined);
                 });
             }, 5000);

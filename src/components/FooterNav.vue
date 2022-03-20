@@ -6,10 +6,10 @@
         <div class="content">
           <div class="in">
             <i
-              @click="toPath(item.path, index)"
+              @click="toPath(item.pathName, index)"
               :class="item.icon"
               :style="{
-                color: item.path === isSelected ? '#26ABFF' : '#666666',
+                color: item.pathName === isSelected ? '#26ABFF' : '#666666',
               }"
             ></i>
           </div>
@@ -29,22 +29,22 @@ export default {
         {
           name: "外卖",
           icon: "el-icon-eleme",
-          path: "takeout",
+          pathName: "takeout",
         },
         {
           name: "搜索",
           icon: "el-icon-search",
-          path: "2",
+          pathName: "SearchMerchants",
         },
         {
           name: "订单",
           icon: "el-icon-tickets",
-          path: "3",
+          pathName: "3",
         },
         {
           name: "个人",
           icon: "el-icon-s-custom",
-          path: "personal",
+          pathName: "personal",
         },
       ],
     };

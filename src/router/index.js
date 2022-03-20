@@ -20,6 +20,10 @@ const routerOptions = {
                 name: 'takeout',
                 path: 'takeout',
                 component: () => import('../pages/TakeOut/TakeOut.vue')
+            }, { //搜索页
+                name: 'SearchMerchants',
+                path: 'SearchMerchants',
+                component: () => import('../pages/SearchMerchants/SearchMerchants.vue')
             }]
         }, {
             //登录
@@ -84,10 +88,9 @@ const routerOptions = {
             component: () => import('../pages/merchant/Merchant.vue'),
             props: (route) => {
                 let item = JSON.parse(route.query.item);
-                console.log(item);
                 return {
                     id: route.query.id,
-                    itemObj:item
+                    itemObj: item
                 };
             }
         }

@@ -121,7 +121,7 @@ export default {
       this.$axios
         .post("user/getUserMsg")
         .then((result) => {
-          // console.log(result);
+          // console.log(result.data);
           if (result.data.status === 401) {
             this.$message({
               message: result.data.msg,

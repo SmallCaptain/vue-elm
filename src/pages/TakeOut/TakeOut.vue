@@ -62,7 +62,7 @@ export default {
         pathName: "personal",
       },
       Search: {
-        pathName: "",
+        pathName: "SearchMerchants",
       },
       swiperOptions: {
         // 参数选项,显示小点
