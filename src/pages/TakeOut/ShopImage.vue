@@ -24,7 +24,13 @@ export default {
   },
   methods:{
       toShop(){
-          alert('跳转路由至:'+this.item.pathName)
+          this.$router.push({
+            name:'GoodsCategory',
+            query:{
+              title:this.item.shopName,
+              type:this.item.pathName
+            }
+          })
       }
   }
 };

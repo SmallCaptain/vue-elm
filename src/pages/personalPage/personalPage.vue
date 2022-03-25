@@ -89,7 +89,7 @@ export default {
   methods: {
     async getPosition() {
       // 先向 vuex 请求数据 注：vuex被设置存储在了sessionStorge中 可以防止切回个人页面多次请求数据
-  
+
       let area = this.$store.state.chageRecive.nowPosistion.area;
       if (area === "") {
         //为空时 说明需要向后台请求数据
@@ -98,12 +98,14 @@ export default {
           this.$axiosP
             .get("v1/cities?type=guess")
             .then((result) => {
+              alert(JSON.stringify(result.data));
               console.log("@result", result);
               resolve(result.data);
             })
             .catch((err) => {
               console.log("@error", err);
-              alert('定位炸啦！')
+              alert(err);
+              alert("定位炸啦！");
               reject(undefined);
             });
         });
@@ -119,7 +121,6 @@ export default {
                 })
                 .catch((err) => {
                   console.log("@error", err);
-                  alert(err);
                   reject(undefined);
                 });
             }, 5000);
@@ -142,6 +143,16 @@ export default {
     // 进行判断是否需要重新获取定位数据
     this.getPosition();
     this.reSetVuxRoute();
+
+    this.$axios.post("login/getIp")
+      .then((result) => {
+        alert(JSON.stringify(result.data));
+        console.log(result);
+      })
+      .catch((err) => {
+        alert(err)
+        console.log(err);
+      });
   },
 };
 </script>
@@ -167,16 +178,19 @@ export default {
     }
   }
 }
-.fade-enter,.fade-leave-to{
+.fade-enter,
+.fade-leave-to {
   opacity: 0;
 }
-.fade-enter-to,.fade-leave{
+.fade-enter-to,
+.fade-leave {
   opacity: 1;
 }
-.fade-leave-active,.fade-enter-active{
+.fade-leave-active,
+.fade-enter-active {
   transition: all 1s;
 }
-.fade-leave-active{
+.fade-leave-active {
   display: none;
 }
 </style>

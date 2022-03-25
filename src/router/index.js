@@ -93,6 +93,16 @@ const routerOptions = {
                     itemObj: item
                 };
             }
+        },//商家分类页面
+        {
+            name:'GoodsCategory',
+            path:'/GoodsCategory',
+            component:() =>import('../pages/GoodsCategory/index.vue'),
+            props:(route) =>{
+                return{
+                    funcName:route.query.title
+                }
+            }
         }
     ]
 }
