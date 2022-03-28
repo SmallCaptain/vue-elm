@@ -98,7 +98,7 @@ export default {
           this.$axiosP
             .get("v1/cities?type=guess")
             .then((result) => {
-              alert(JSON.stringify(result.data));
+              // alert(JSON.stringify(result.data));
               console.log("@result", result);
               resolve(result.data);
             })
@@ -146,7 +146,7 @@ export default {
 
     this.$axios.post("login/getIp")
       .then((result) => {
-        alert(JSON.stringify(result.data));
+        // alert(JSON.stringify(result.data));
         console.log(result);
       })
       .catch((err) => {

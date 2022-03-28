@@ -28,7 +28,7 @@
           @click="reSetText(item)"
         >
           <span class="name">{{ item }}</span>
-          <span class="del" @click="delMsg(index)">x</span>
+          <span class="del" @click.stop="delMsg(index)">x</span>
         </div>
         <div @click="clearHistory" class="clearHistory">清空搜索历史记录</div>
       </div>

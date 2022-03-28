@@ -102,16 +102,23 @@ export default {
         return 5;
       },
     },
+    de_condition:{
+      type:Number,
+      default(){
+        return 10;
+      }
+    }
   },
   data() {
     return {
       couldBuy: false,
       grap: 0,
       shopCart: false,
+      
     };
   },
   created() {
-    this.grap = this.shippingFee;
+    this.grap = this.de_condition;
   },
   methods: {
     showItems() {
@@ -158,7 +165,7 @@ export default {
     countTotalPrice(newValue, oldValue) {
       if (newValue > oldValue) {
         // 新增加了商品
-        this.grap = this.shippingFee - newValue;
+        this.grap = this.de_condition - newValue;
 
         if (this.grap <= 0) {
           this.grap = 0;
@@ -168,7 +175,7 @@ export default {
         }
       } else {
         // 删除了商品
-        this.grap = this.shippingFee - newValue;
+        this.grap = this.de_condition - newValue;
 
         if (this.grap <= 0) {
           this.grap = 0;
