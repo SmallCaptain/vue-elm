@@ -67,7 +67,7 @@ export default {
           {
             name: "蜂鸟专送",
             icon: "fengniaopaotui",
-            keyword:'is_hummingbird'
+            keyword: "is_hummingbird",
           },
         ],
       },
@@ -78,19 +78,19 @@ export default {
             name: "品牌商家",
             char: "品",
             color: "rgb(63, 189, 230)",
-            keyword:'is_brand'
+            keyword: "is_brand",
           },
           {
             name: "准时达",
             char: "准",
             color: "rgb(87, 169, 255)",
-            keyword:'is_ticket'
+            keyword: "is_ticket",
           },
           {
             name: "在线支付",
             char: "付",
             color: "rgb(255, 78, 0)",
-            keyword:'time_pay'
+            keyword: "time_pay",
           },
         ],
       },
@@ -118,8 +118,10 @@ export default {
       this.selectedOptions = [];
     },
     sureSelected() {
-      //发送 ajax请求给后端返回数据 前端这里将数据name取出重新整合
-      if (this.selectedOptions.length !== 0) this.sendTypeProvide(this.selectedOptions,'Filtrate');
+      //发送 ajax请求给后端返回数据 前端这里将数据name取出重新整合 这里通知父和祖组件
+
+      this.sendTypeProvide(this.selectedOptions, "Filtrate");
+      this.$emit("chageFilterIndex", 2);
     },
   },
 };

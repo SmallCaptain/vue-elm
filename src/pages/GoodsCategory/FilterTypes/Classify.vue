@@ -4,7 +4,7 @@
       <!-- 分类标签 -->
       <div class="tag">
         <!-- 总和 -->
-        <div class="total">
+        <div class="total" @click="searchAll">
           <div class="totalContent">
             <div class="name">
               <span>{{ typeItems.name }}</span>
@@ -43,9 +43,9 @@
       <div class="list">
         <div
           class="listItem"
-          v-for="(item, index) in typeItems.list[currentIndex].items"
+          v-for="(item,index) in typeItems.list[currentIndex].items"
           :key="index"
-          @click="sendType(item.type)"
+          @click="sendType(item.type,item.name)"
         >
           <div class="name">
             <span>{{ item.name }}</span>
@@ -64,7 +64,7 @@ import iconSvg from "../../../components/iconSvg.vue";
 export default {
   components: { iconSvg },
   name: "Classify",
-  inject: ["sendTypeProvide"],
+  inject: ["sendTypeProvide",'searchAllProvide'],
   props: {
     typeItems: {
       type: Object,
@@ -138,15 +138,25 @@ export default {
     chageCurrentIndex(index) {
       this.currentIndex = index;
     },
-    sendType(type) {
-      this.sendTypeProvide(type,'Classify');
+    sendType(type,name) {
+      this.sendTypeProvide(type,'Classify',name);
+      this.$emit("chageFilterIndex", 0);
     },
+    searchAll(){
+      this.searchAllProvide();
+      this.$emit("chageFilterIndex", 0);
+      
+    }
   },
   created() {},
 };
 </script>
 
 <style lang="less" scoped>
+
+::-webkit-scrollbar {
+  display: none;
+}
 div#Classify {
   position: fixed;
   left: 0;

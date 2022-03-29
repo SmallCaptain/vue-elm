@@ -6,6 +6,48 @@
   "description": "",
   "glyphs": [
     {
+      "icon_id": "4719763",
+      "name": "商家列表",
+      "font_class": "shangjialiebiao",
+      "unicode": "e6b1",
+      "unicode_decimal": 59057
+    },
+    {
+      "icon_id": "5039914",
+      "name": "饮品",
+      "font_class": "yinpin",
+      "unicode": "e61c",
+      "unicode_decimal": 58908
+    },
+    {
+      "icon_id": "25163437",
+      "name": "水果生鲜",
+      "font_class": "shuiguoshengxian",
+      "unicode": "fd31",
+      "unicode_decimal": 64817
+    },
+    {
+      "icon_id": "26527830",
+      "name": "cake，生日蛋糕，蛋糕，美食",
+      "font_class": "a-cakeshengridangaodangaomeishi",
+      "unicode": "e6f3",
+      "unicode_decimal": 59123
+    },
+    {
+      "icon_id": "26527834",
+      "name": "epslo，厨师帽，厨师，烹饪",
+      "font_class": "a-epslochushimaochushipengren",
+      "unicode": "e6f4",
+      "unicode_decimal": 59124
+    },
+    {
+      "icon_id": "26527902",
+      "name": "store，shop，商店，超市，小卖部",
+      "font_class": "a-storeshopshangdianchaoshixiaomaibu",
+      "unicode": "e6fb",
+      "unicode_decimal": 59131
+    },
+    {
       "icon_id": "26720892",
       "name": "蜂鸟跑腿",
       "font_class": "fengniaopaotui",
@@ -55,27 +97,6 @@
       "unicode_decimal": 58926
     },
     {
-      "icon_id": "1009350",
-      "name": "时令果蔬",
-      "font_class": "shilingguoshu",
-      "unicode": "e65b",
-      "unicode_decimal": 58971
-    },
-    {
-      "icon_id": "2304954",
-      "name": "Drink",
-      "font_class": "icon-test",
-      "unicode": "e63b",
-      "unicode_decimal": 58939
-    },
-    {
-      "icon_id": "4512350",
-      "name": "厨师",
-      "font_class": "chushi",
-      "unicode": "e71f",
-      "unicode_decimal": 59167
-    },
-    {
       "icon_id": "5130414",
       "name": "汉堡",
       "font_class": "hanbao",
@@ -90,25 +111,11 @@
       "unicode_decimal": 58881
     },
     {
-      "icon_id": "8765695",
-      "name": "蛋糕",
-      "font_class": "dangao",
-      "unicode": "e603",
-      "unicode_decimal": 58883
-    },
-    {
       "icon_id": "25164527",
       "name": "百货超市",
       "font_class": "baihuochaoshi",
       "unicode": "fd6b",
       "unicode_decimal": 64875
-    },
-    {
-      "icon_id": "97271",
-      "name": "商家",
-      "font_class": "weibiaoti1",
-      "unicode": "e607",
-      "unicode_decimal": 58887
     },
     {
       "icon_id": "88228",

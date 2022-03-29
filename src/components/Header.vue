@@ -39,6 +39,8 @@ div#Header {
   display: flex;
   height: @height;
   background-color: #3190e8;
+  z-index: 25;
+
   & > div.goBack {
     position: relative;
     flex: 1;

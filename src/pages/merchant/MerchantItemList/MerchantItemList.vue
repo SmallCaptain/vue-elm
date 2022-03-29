@@ -35,7 +35,7 @@
         :selectData="selectData"
         @clearCarts="clearCarts"
         :shippingFee="itemObj.shipping_fee"
-        :de_condition="itemObj.de_condition"
+        :de_condition="itemObj.de_conditions"
       />
     </footer>
   </div>
