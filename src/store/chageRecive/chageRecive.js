@@ -28,13 +28,18 @@ const option = {
         pushAddress(state, data) {
             //检查一下数据中和data数据中有无重复的问题 有重复就不推入了
             // 对象数据。。
-           state.address=data;
+            state.address = data;
         },
-        // delAddress(state,data){
-        //     state.address = state.address.filter((item)=>{
-        //         return item.
-        //     })
-        // }
+        delAddress(state, data) {
+            state.address = state.address.filter(item => {
+                let flag = true;
+                data.forEach(element => {
+                    if(element.recive_area_detail === item.recive_area_detail) flag = false;
+                });
+
+                return flag;
+            });
+        }
 
     },
     //数据存储层

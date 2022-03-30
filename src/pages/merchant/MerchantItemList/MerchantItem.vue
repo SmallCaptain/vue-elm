@@ -45,7 +45,16 @@
 
                 <div class="right">
                   <!-- 选择  +  的button -->
-                  <button ref="addBtn" @click="addItem(index)"></button>
+                  <button
+                    class="add"
+                    v-show="item.is_meal"
+                    ref="addBtn"
+                    @click="addItem(index)"
+                  ></button>
+                  <!-- 规格 button -->
+                  <button class="selectSize" v-show="!item.is_meal">
+                    选规格
+                  </button>
                 </div>
               </div>
             </div>
@@ -106,11 +115,14 @@ export default {
     //初始化 selecteds
     initSelecteds() {
       // 针对多少个物品 给选择量推入0(初始化选择数组)
-      let newArray = [];
-      this.datas.items.forEach(() => {
-        newArray.push(0);
-      });
-      this.selecteds = newArray;
+
+      if (this.selecteds.length === 0) {
+        let newArray = [];
+        this.datas.items.forEach(() => {
+          newArray.push(0);
+        });
+        this.selecteds = newArray;
+      }
     },
   },
 
@@ -129,94 +141,113 @@ export default {
   },
   // 监听购物车数据
   watch: {
-    selectDataComputed(newValue, oldValue) {
-    
-      let grap = Math.abs(oldValue.length - newValue.length);
+    selectDataComputed: {
+      immediate: true,
+      handler(newValue, oldValue) {
+        if (newValue !== undefined && oldValue !== undefined) {
+          let grap = Math.abs(oldValue.length - newValue.length);
+          if (grap > 1) {
+            //说明是全部清空
+            let arr = [];
+            this.selecteds.forEach(() => {
+              arr.push(0);
+            });
+            this.selecteds = arr;
+          } else {
+            if (!this.isButtonOn) {
+              //购物车触发时
+              if (newValue < oldValue) {
+                //差距只有1 说明有单个商品归为0
+                let id = null; //商品id 挑选出没有的
+                let type = null;
+                let index = 0;
+                for (let i = 0; i < oldValue.length; i++) {
+                  let findFlag = false; //默认没找到
 
-      if (grap > 1) {//说明是全部清空
-        let arr = [];
-        this.selecteds.forEach(() =>{
-          arr.push(0);
-        });
-        this.selecteds = arr;
-      } else {
-        if (!this.isButtonOn) {
-          //购物车触发时
-          if (newValue < oldValue) {
-            //差距只有1 说明有单个商品归为0
-            let id = null; //商品id 挑选出没有的
-            let type = null;
-            let index = 0;
-            for (let i = 0; i < oldValue.length; i++) {
-              let findFlag = false; //默认没找到
-
-              for (let j = 0; j < newValue.length; j++) {
-                if (
-                  oldValue[i].item.id === newValue[j].item.id &&
-                  oldValue[i].item.type === newValue[j].item.type
-                ) {
-                  findFlag = true;
-                  break;
-                }
-              }
-              if (!findFlag) {
-                //说明被删的 就是这个
-                id = oldValue[i].item.id;
-                type = oldValue[i].item.type;
-                index = oldValue[i].index;
-                break;
-              }
-            }
-            if (id !== null && type === this.datas.name) {
-              //查找到了已经删掉的那个商品 并且它的分类是属于本组的
-              this.selecteds[index] = 0;
-              this.$forceUpdate();
-            }
-          } else if (newValue.length === oldValue.length) {
-            //反之 这里不可能出现 > 的情况 只有等于的情况
-            //该情况下 需要检测 到底是哪一个数据发生了变化
-
-            let id = null; //商品id
-            let type = null;
-            let index = 0;
-            let rI = 0;
-            for (let i = 0; i < oldValue.length; i++) {
-              let findFlag = false; //默认没找到
-
-              for (let j = 0; j < newValue.length; j++) {
-                if (oldValue[i].item.type === newValue[j].item.type) {
-                  //同种类型
-                  if (oldValue[i].item.id === newValue[j].item.id) {
-                    //商品一致
-                    if (oldValue[i].counts !== newValue[j].counts) {
-                      // 数量发生改变
+                  for (let j = 0; j < newValue.length; j++) {
+                    if (
+                      oldValue[i].item.id === newValue[j].item.id &&
+                      oldValue[i].item.type === newValue[j].item.type
+                    ) {
                       findFlag = true;
                       break;
                     }
                   }
+                  if (!findFlag) {
+                    //说明被删的 就是这个
+                    id = oldValue[i].item.id;
+                    type = oldValue[i].item.type;
+                    index = oldValue[i].index;
+                    break;
+                  }
+                }
+                if (id !== null && type === this.datas.name) {
+                  //查找到了已经删掉的那个商品 并且它的分类是属于本组的
+                  this.selecteds[index] = 0;
+                  this.$forceUpdate();
+                }
+              } else if (newValue.length === oldValue.length) {
+                //反之 这里不可能出现 > 的情况 只有等于的情况
+                //该情况下 需要检测 到底是哪一个数据发生了变化
+
+                let id = null; //商品id
+                let type = null;
+                let index = 0;
+                let rI = 0;
+                for (let i = 0; i < oldValue.length; i++) {
+                  let findFlag = false; //默认没找到
+
+                  for (let j = 0; j < newValue.length; j++) {
+                    if (oldValue[i].item.type === newValue[j].item.type) {
+                      //同种类型
+                      if (oldValue[i].item.id === newValue[j].item.id) {
+                        //商品一致
+                        if (oldValue[i].counts !== newValue[j].counts) {
+                          // 数量发生改变
+                          findFlag = true;
+                          break;
+                        }
+                      }
+                    }
+                  }
+                  if (findFlag) {
+                    //说明这个是数量变化的商品
+                    id = oldValue[i].item.id;
+                    type = oldValue[i].item.type;
+                    index = oldValue[i].index;
+                    rI = i;
+                    break;
+                  }
+                }
+
+                if (id !== null && type === this.datas.name) {
+                  //查找到了数量发生了变化的那个商品 并且它的分类是属于本组的
+                  this.selecteds[index] = newValue[rI].counts;
+                  this.$forceUpdate();
                 }
               }
-              if (findFlag) {
-                //说明这个是数量变化的商品
-                id = oldValue[i].item.id;
-                type = oldValue[i].item.type;
-                index = oldValue[i].index;
-                rI = i;
-                break;
-              }
-            }
-
-            if (id !== null && type === this.datas.name) {
-              //查找到了数量发生了变化的那个商品 并且它的分类是属于本组的
-              this.selecteds[index] = newValue[rI].counts;
-              this.$forceUpdate();
             }
           }
-        }
-      }
 
-      // 结束后恢复为购物车触发
-      this.isButtonOn = false;
+          // 结束后恢复为购物车触发
+          this.isButtonOn = false;
+        } else {
+          //说明 是购物车缓存所致
+          let arr = [];
+          this.datas.items.forEach(() => {
+            arr.push(0);
+          });
+          for (let i = 0; i < newValue.length; i++) {
+            //需要做如下几个判断
+            // 1.购物车数据是否属于本组件榜 如 热销榜与超好榜
+            // 2.本分类中的第几个数据？ index 判断
+            if (newValue[i].item.type === this.datas.name) {
+              arr[newValue[i].index] = newValue[i].counts;
+            }
+          }
+          this.selecteds = arr;
+        }
+      },
     },
   },
   created() {
@@ -386,7 +417,7 @@ div.item {
               & > div.right {
                 display: flex;
                 align-items: flex-end;
-                & > button {
+                & > button.add {
                   position: relative;
                   display: inline-block;
                   width: 40px;
@@ -416,6 +447,17 @@ div.item {
                     left: 50%;
                     transform: translate(-50%, -50%);
                   }
+                }
+                & > button.selectSize {
+                  display: inline-block;
+                  box-sizing: content-box;
+                  font-size: 25px;
+                  border: 1px solid #3190e8;
+                  outline: none;
+                  background-color: #3190e8;
+                  color: #fff;
+                  padding: 5px 15px;
+                  border-radius: 50px;
                 }
               }
             }

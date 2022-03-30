@@ -26,7 +26,7 @@
     </div>
     <!-- 按钮 -->
     <div class="shoppingBtn">
-      <div v-if="couldBuy" class="buy">
+      <div v-if="couldBuy" @click="doOrder" class="buy">
         <span>去结算</span>
       </div>
       <div v-if="!couldBuy" class="noBuy">
@@ -102,23 +102,32 @@ export default {
         return 5;
       },
     },
-    de_condition:{
-      type:Number,
-      default(){
+    de_condition: {
+      type: Number,
+      default() {
         return 10;
-      }
-    }
+      },
+    },
   },
   data() {
     return {
       couldBuy: false,
       grap: 0,
       shopCart: false,
-      
     };
   },
   created() {
     this.grap = this.de_condition;
+  },
+  beforeDestroy(){
+    //判断由两个组成
+    // 1.本组件购物车是否有数据
+    // 2.vuex中购物车是否存在本购物车数据
+    if(this.selectData.length !==0){
+      this.$emit('cachShoppingCart');
+    }else{
+      this.$emit('cachShoppingCart',[]);
+    }
   },
   methods: {
     showItems() {
@@ -138,8 +147,22 @@ export default {
     // 清空
     clearCarts() {
       // 直接把购物车中每一个按钮都触发掉
-      console.log("清空");
       this.$emit("clearCarts");
+    },
+    //下订单
+    doOrder() {
+      let token = sessionStorage.getItem("Token");
+      if (token === null) {
+        if(confirm('请先登录')){
+          this.$router.replace({
+            name:'login'
+          });
+        }
+      } else {
+        this.$router.push({
+          name: "TheOrder",
+        });
+      }
     },
   },
   computed: {

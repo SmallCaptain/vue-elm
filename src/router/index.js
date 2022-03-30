@@ -103,6 +103,11 @@ const routerOptions = {
                     funcName:route.query.title
                 }
             }
+        },//确定订单页面
+        {
+            name:'TheOrder',
+            path:'/TheOrder',
+            component:()=>import('../pages/TheOrder/TheOrder.vue')
         }
     ]
 }

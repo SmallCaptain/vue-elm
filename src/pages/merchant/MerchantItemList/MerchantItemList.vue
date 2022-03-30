@@ -30,6 +30,7 @@
     <!-- //购物车 -->
     <footer>
       <shopping-cart
+        @cachShoppingCart="cachShoppingCart"
         @selectShops="selectShops"
         @delShops="delShops"
         :selectData="selectData"
@@ -54,184 +55,14 @@ export default {
     storeId: {
       type: String,
     },
-    itemObj:{
-      type:Object
-    }
+    itemObj: {
+      type: Object,
+    },
   },
   data() {
     return {
-      itemData: [
-        {
-          name: "热销榜",
-          counts: 0,
-          //items数据从后端拿取 name和counts前端这边自行维护
-          items: [
-            {
-              id: "1",
-              name: "阿尔卑斯",
-              type: "热销榜",
-              price: 2.5,
-              introduction: "好吃！",
-              sales: 100,
-              point: 30.5,
-              label: "冰淇淋",
-              is_specialty: 1,
-              is_new_product: 1,
-              img: "http://localhost:5115/public/images/iceCream.jpg",
-            },
-            {
-              id: "2",
-              name: "阿尔卑斯",
-              type: "热销榜",
-              price: 20.5,
-              introduction: "好吃！",
-              sales: 100,
-              point: 30.5,
-              label: "冰淇淋呢",
-              is_specialty: 0,
-              is_new_product: 1,
-              img: "http://localhost:5115/public/images/iceCream.jpg",
-            },
-            {
-              id: "3",
-              name: "阿尔卑斯",
-              type: "热销榜",
-              price: 20.5,
-              introduction: "好吃！",
-              sales: 100,
-              point: 30.5,
-              label: "冰淇淋",
-              is_specialty: 1,
-              is_new_product: 0,
-              img: "http://localhost:5115/public/images/iceCream.jpg",
-            },
-            {
-              id: "4",
-              name: "阿尔卑斯",
-              type: "热销榜",
-              price: 20.5,
-              introduction: "好吃！",
-              sales: 100,
-              point: 30.5,
-              label: "冰淇淋",
-              is_specialty: 0,
-              is_new_product: 0,
-              img: "http://localhost:5115/public/images/iceCream.jpg",
-            },
-            {
-              id: "5",
-              name: "阿尔卑斯",
-              type: "热销榜",
-              price: 20.5,
-              introduction: "好吃！",
-              sales: 100,
-              point: 30.5,
-              label: "冰淇淋",
-              is_specialty: 1,
-              is_new_product: 1,
-              img: "http://localhost:5115/public/images/iceCream.jpg",
-            },
-            {
-              id: "6",
-              name: "阿尔卑斯",
-              type: "热销榜",
-              price: 20.5,
-              introduction: "好吃！",
-              sales: 100,
-              point: 30.5,
-              label: "冰淇淋",
-              is_specialty: 1,
-              is_new_product: 1,
-              img: "http://localhost:5115/public/images/iceCream.jpg",
-            },
-          ],
-        },
-        {
-          name: "折扣榜",
-          counts: 0,
-          //items数据从后端拿取 name和counts前端这边自行维护
-          items: [
-            {
-              id: "7",
-              name: "阿尔卑斯",
-              type: "折扣榜",
-              price: 2.5,
-              introduction: "好吃！",
-              sales: 100,
-              point: 30.5,
-              label: "冰淇淋",
-              is_specialty: 1,
-              is_new_product: 1,
-              img: "http://localhost:5115/public/images/iceCream.jpg",
-            },
-            {
-              id: "8",
-              name: "阿尔卑斯",
-              type: "折扣榜",
-              price: 20.5,
-              introduction: "好吃！",
-              sales: 100,
-              point: 30.5,
-              label: "冰淇淋呢",
-              is_specialty: 0,
-              is_new_product: 1,
-              img: "http://localhost:5115/public/images/iceCream.jpg",
-            },
-            {
-              id: "9",
-              name: "阿尔卑斯",
-              type: "折扣榜",
-              price: 20.5,
-              introduction: "好吃！",
-              sales: 100,
-              point: 30.5,
-              label: "冰淇淋",
-              is_specialty: 1,
-              is_new_product: 0,
-              img: "http://localhost:5115/public/images/iceCream.jpg",
-            },
-            {
-              id: "10",
-              name: "阿尔卑斯",
-              type: "折扣榜",
-              price: 20.5,
-              introduction: "好吃！",
-              sales: 100,
-              point: 30.5,
-              label: "冰淇淋",
-              is_specialty: 0,
-              is_new_product: 0,
-              img: "http://localhost:5115/public/images/iceCream.jpg",
-            },
-            {
-              id: "11",
-              name: "阿尔卑斯",
-              type: "折扣榜",
-              price: 20.5,
-              introduction: "好吃！",
-              sales: 100,
-              point: 30.5,
-              label: "冰淇淋",
-              is_specialty: 1,
-              is_new_product: 1,
-              img: "http://localhost:5115/public/images/iceCream.jpg",
-            },
-            {
-              id: "12",
-              name: "阿尔卑斯",
-              type: "折扣榜",
-              price: 20.5,
-              introduction: "好吃！",
-              sales: 100,
-              point: 30.5,
-              label: "冰淇淋",
-              is_specialty: 1,
-              is_new_product: 1,
-              img: "http://localhost:5115/public/images/iceCream.jpg",
-            },
-          ],
-        },
-      ],
+      //商品分类数据
+      itemData: [],
       // 用于存储当前已选择了的商品
       selectData: [],
       //左侧导航条高度
@@ -403,18 +234,60 @@ export default {
           itemsData.push(obj);
         });
         this.itemData = itemsData;
+        this.$nextTick(() => {
+          // 初始化navDataTop
+          this.initNavDataTop();
+          // 初始化itemDataTop
+          this.initItemDataTop();
+        });
+        this.initcatchShoppingCart();
       }
-      this.$nextTick(() => {
-        // 初始化navDataTop
-        this.initNavDataTop();
-        // 初始化itemDataTop
-        this.initItemDataTop();
-      });
+    },
+    //缓存 购物车数据至vuex
+    cachShoppingCart(data = null) {
+      let obj = {};
+      obj.storeId = this.storeId;
+      obj.data = this.selectData;
+      if (data !== null) obj.data = data;
+      this.$store.dispatch("shopping/addShopping", obj);
+    },
+    //初始化购物车数据
+    initcatchShoppingCart() {
+      let shoppingCart = this.$store.state.shopping.shoppingCart;
+
+      if (shoppingCart.length !== 0) {
+        //说明存在缓存数据 查看是否属于当前购物车数据
+        let index = -1;
+        for (let i = 0; i < shoppingCart.length; i++) {
+          if (shoppingCart[i].storeId === this.storeId) {
+            index = i;
+            break;
+          }
+        }
+        // console.log(shoppingCart[index]);
+        if (index !== -1) this.selectData = shoppingCart[index].data;
+
+        //与此同时 初始化 分类数据总量
+        let newItemData = [];
+        // console.log(this.itemData);
+        this.itemData.forEach((item) => {
+          let obj = item;
+
+          shoppingCart[index].data.forEach((shopItem) => {
+            if (obj.name === shopItem.item.type) {
+              //找到分类
+              obj.counts += shopItem.counts;
+            }
+          });
+          newItemData.push(obj);
+        });
+        // console.log(newItemData);
+        if (newItemData.length !== 0) this.itemData = newItemData;
+      }
     },
   },
   mounted() {
     this.getItems();
-
   },
   watch: {
     currentIndex(newValue) {

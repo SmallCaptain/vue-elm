@@ -70,19 +70,25 @@ export default {
           this.$axios
             .post("user/delItem", this.delItem)
             .then((result) => {
-              console.log(result);
-
+              // console.log(result);
               if (result.data.status === 200) {
+                //得清除掉vuex里的数据
                 this.$message({
                   type: "success",
                   message: "修改成功~",
                 });
+                this.$store.dispatch('chageRecive/delAddress',this.delItem);
+                this.delItem = [];
               } else {
                 this.$message({
                   type: "error",
                   message: "修改失败了~",
                 });
-                this.$router.go(0);
+                //this.$router.go(0);
+                //恢复数据
+                this.addressDetail = this.delItem;
+                this.$store.dispatch('chageRecive/pushAddress',this.delItem)
+                this.delItem = [];
               }
             })
             .catch((err) => {
@@ -130,7 +136,7 @@ export default {
 
             newArr.push(obj);
           });
-          console.log(data);
+          // console.log(data);
           //通知vuex 将数据一个个推入到对应数组里
           // newArr.forEach((item) => {
           //   this.$store.dispatch("chageRecive/pushAddress", item);

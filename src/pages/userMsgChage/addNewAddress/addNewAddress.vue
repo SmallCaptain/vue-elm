@@ -152,28 +152,50 @@ export default {
         this.inputs.forEach((item) => {
           data[item.name] = item.data;
         });
-        // 发送ajax请求给后台让他插入数据
-        this.$axios
-          .post("user/addAddress", data)
-          .then((result) => {
-            if (result.data.status === 200) {
-              this.$router.replace({
-                path: "/chageRecAddress",
-              });
-            } else {
+        let vuexData = this.$store.state.chageRecive.address;
+
+        let flag = true;
+
+        vuexData.forEach((obj) => {
+          if (
+            obj.recive_area === data.recive_area &&
+            obj.recive_area_detail === data.recive_area_detail
+          ) {
+            //两个都相同就G
+            flag = false;
+          }
+        });
+
+        if (flag) {
+          // 发送ajax请求给后台让他插入数据
+          this.$axios
+            .post("user/addAddress", data)
+            .then((result) => {
+              if (result.data.status === 200) {
+                // this.$router.push({
+                //   path: "/chageRecAddress",
+                // });
+                this.$router.go(-1);
+              } else {
+                this.$message({
+                  type: "error",
+                  message: "出错",
+                });
+              }
+            })
+            .catch((err) => {
+              console.log(err);
               this.$message({
                 type: "error",
                 message: "出错",
               });
-            }
-          })
-          .catch((err) => {
-            console.log(err);
-            this.$message({
-              type: "error",
-              message: "出错",
             });
+        }else{
+          this.$message({
+            type:'error',
+            message:'不能设置相同的地址'
           });
+        }
       } else {
         this.$message({
           type: "error",
