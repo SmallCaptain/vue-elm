@@ -37,6 +37,7 @@
         @clearCarts="clearCarts"
         :shippingFee="itemObj.shipping_fee"
         :de_condition="itemObj.de_conditions"
+        :storeId = "storeId"
       />
     </footer>
   </div>
@@ -265,7 +266,10 @@ export default {
           }
         }
         // console.log(shoppingCart[index]);
-        if (index !== -1) this.selectData = shoppingCart[index].data;
+        if (index !== -1){
+          this.selectData = shoppingCart[index].data;
+        }else
+          return;
 
         //与此同时 初始化 分类数据总量
         let newItemData = [];

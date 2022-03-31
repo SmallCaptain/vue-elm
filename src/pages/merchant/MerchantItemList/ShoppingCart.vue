@@ -108,6 +108,10 @@ export default {
         return 10;
       },
     },
+    storeId:{
+      type:String,
+      require:true
+    }
   },
   data() {
     return {
@@ -161,6 +165,9 @@ export default {
       } else {
         this.$router.push({
           name: "TheOrder",
+          query:{
+            storeId:this.storeId
+          }
         });
       }
     },
