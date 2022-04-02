@@ -107,7 +107,12 @@ const routerOptions = {
         {
             name:'TheOrder',
             path:'/TheOrder',
-            component:()=>import('../pages/TheOrder/TheOrder.vue')
+            component:()=>import('../pages/TheOrder/TheOrder.vue'),
+            props:(route)=>{
+                return{
+                    storeId:route.query.storeId
+                }
+            }
         }
     ]
 }

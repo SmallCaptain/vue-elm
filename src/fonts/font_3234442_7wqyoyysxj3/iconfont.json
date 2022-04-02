@@ -6,6 +6,13 @@
   "description": "",
   "glyphs": [
     {
+      "icon_id": "16563867",
+      "name": "修改、修改资料",
+      "font_class": "cangpeitubiao_xiugaixiugaiziliao",
+      "unicode": "e625",
+      "unicode_decimal": 58917
+    },
+    {
       "icon_id": "4719763",
       "name": "商家列表",
       "font_class": "shangjialiebiao",

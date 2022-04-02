@@ -1,8 +1,8 @@
 @font-face {
   font-family: "iconfont"; /* Project id 3234442 */
-  src: url('iconfont.woff2?t=1648518110120') format('woff2'),
-       url('iconfont.woff?t=1648518110120') format('woff'),
-       url('iconfont.ttf?t=1648518110120') format('truetype');
+  src: url('iconfont.woff2?t=1648889344323') format('woff2'),
+       url('iconfont.woff?t=1648889344323') format('woff'),
+       url('iconfont.ttf?t=1648889344323') format('truetype');
 }
 
 .iconfont {
@@ -11,6 +11,10 @@
   font-style: normal;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+.icon-cangpeitubiao_xiugaixiugaiziliao:before {
+  content: "\e625";
 }
 
 .icon-shangjialiebiao:before {

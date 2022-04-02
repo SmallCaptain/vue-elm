@@ -73,7 +73,8 @@ div#SendTime {
           display: inline-block;
           background-color: #298eeb;
           color: #fff;
-          padding: 5px;
+          padding: 5px 10px;
+          border-radius: 100px;
         }
       }
     }

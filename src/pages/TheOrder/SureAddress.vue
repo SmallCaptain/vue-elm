@@ -8,8 +8,8 @@
       <div class="msg">
         <div class="reciveMsg">
           <span class="name">
-            <span class="firstName">{{getFirstName}}</span>
-            <span class="lastName">{{getLastName}}</span>
+            <span class="firstName">{{ getFirstName }}</span>
+            <span class="lastName">{{ getLastName }}</span>
           </span>
           <span class="phone">{{ address.usephone }}</span>
         </div>
@@ -34,31 +34,37 @@ export default {
       type: Object,
       default() {
         return {
-          recive_area: "漳州",
-          recive_area_detail: "闽南师范大学",
-          usephone: "15362182378",
-          recive_name: "小船长",
+          recive_area: "",
+          recive_area_detail: "",
+          usephone: "",
+          recive_name: "无",
         };
       },
     },
   },
-  computed:{
-      getFirstName(){
-          return this.address.recive_name[0];
-      },
-      getLastName(){
-          let length = this.address.recive_name.length;
-          let fullname = this.address.recive_name.split('');
-          let lastName = fullname.splice(1,length - 1).join('');
-          
-          return lastName;
+  computed: {
+    getFirstName() {
+      let firstName = "无";
+      if (this.address.recive_name !== undefined)
+        firstName = this.address.recive_name[0];
+      return firstName;
+    },
+    getLastName() {
+      let lastName = "";
+      if (this.address.recive_name !== undefined) {
+        let length = this.address.recive_name.length;
+        let fullname = this.address.recive_name.split("");
+        lastName = fullname.splice(1, length - 1).join("");
       }
+
+      return lastName;
+    },
   },
-  methods:{
-      toChageRecive(){
-          alert('跳转至修改收货地址')
-      }
-  }
+  methods: {
+    toChageRecive() {
+      this.$emit("chageAddressShow");
+    },
+  },
 };
 </script>
 
