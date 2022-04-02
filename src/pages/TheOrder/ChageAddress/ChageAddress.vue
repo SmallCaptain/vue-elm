@@ -22,6 +22,13 @@
             />
           </li>
         </ul>
+        <!-- 无收货地址时的提示与操作 -->
+        <div class="methion" v-show="reciveAddress.length === 0">
+          <div class="methionContent">
+            <div class="msg">暂无收货地址。。</div>
+            <div @click="toAddress" class="addAddress">点我去新增地址</div>
+          </div>
+        </div>
       </div>
     </transition>
 
@@ -64,9 +71,14 @@ export default {
     chageAddressShow() {
       this.$emit("chageAddressShow");
     },
-    chageSelect(index){
+    chageSelect(index) {
       this.currentIndex = index;
-      this.$emit('chageAddress',this.currentIndex);
+      this.$emit("chageAddress", this.currentIndex);
+    },
+    toAddress(){
+      this.$router.push({
+        name:'receiveAdressChage'
+      })
     }
   },
 };
@@ -115,6 +127,23 @@ div#ChageAddress {
     & > ul.list {
       padding: 0;
       list-style: none;
+    }
+    & > div.methion {
+      & > div.methionContent {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        & > div {
+          font-size: 32px;
+          color: #666;
+        }
+        & > div.msg {
+          margin-bottom: 20px;
+        }
+        & > div.addAddress {
+          color: #3190e8;
+        }
+      }
     }
   }
 
