@@ -25,6 +25,7 @@ Vue.use(VueAwesomeSwiper);
 import './fonts/font_3234442_7wqyoyysxj3/iconfont.css'
 //引入 阿里巴巴矢量库 symbol 引入svg
 import './fonts/font_3234442_7wqyoyysxj3/iconfont.js'
+
 Vue.prototype.$message = Message;
 Vue.config.productionTip = false;
 Vue.prototype.$axios = axios;

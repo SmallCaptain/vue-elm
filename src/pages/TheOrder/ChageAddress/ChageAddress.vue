@@ -1,7 +1,7 @@
 <template>
   <div id="ChageAddress">
     <transition name="popup">
-      <div class="ChageAddressContent" v-if="show">
+      <div class="ChageAddressContent" v-show="show">
         <!-- title -->
         <div class="title">
           <!-- title -->
@@ -10,7 +10,7 @@
             <span @click="chageAddressShow">X</span>
           </div>
         </div>
-        <ul class="list">
+        <ul ref="main" class="list">
           <li class="item">
             <AddressItem
               :index="index"
@@ -75,12 +75,15 @@ export default {
       this.currentIndex = index;
       this.$emit("chageAddress", this.currentIndex);
     },
-    toAddress(){
+    toAddress() {
       this.$router.push({
-        name:'receiveAdressChage'
-      })
-    }
+        name: "receiveAdressChage",
+      });
+    },
+
   },
+
+
 };
 </script>
 

@@ -119,7 +119,9 @@ export default {
     if (this.isLogin) {
       console.log("已登录");
       this.$axios
-        .post("user/getUserMsg")
+        .post("user/getUserMsg",{
+          username:this.username
+        })
         .then((result) => {
           // console.log(result.data);
           if (result.data.status === 401) {

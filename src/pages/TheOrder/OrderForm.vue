@@ -26,6 +26,9 @@ export default {
         };
       },
     },
+    address:{
+      type:Object,
+    }
   },
   data() {
     return {
@@ -57,7 +60,11 @@ export default {
     },
     //下单
     doOrder(){
-        console.log(this.totalPrice);
+        if(this.address !== undefined){
+            console.log('ok');
+        }else{
+          confirm('请先选择收货地址');
+        }
     }
   },
   watch: {

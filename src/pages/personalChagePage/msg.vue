@@ -12,8 +12,8 @@
             :on-success="handleAvatarSuccess"
             :before-upload="beforeAvatarUpload"
             :headers="{
-                Authorization:token
-              }"
+              Authorization: token,
+            }"
           >
             <img v-if="userCopy.img" :src="userCopy.img" class="avatar" />
             <i v-else class="el-icon-plus avatar-uploader-icon"></i>
@@ -70,15 +70,16 @@ export default {
   },
   methods: {
     handleAvatarSuccess(res, file) {
-      if(res.status === 200){
+      if (res.status === 200) {
         // this.$set(this.userCopy,'img',res.src)
-        this.$emit('updateImg',res.src);
-        this.$router.go(0);
-      }else{
+        this.$emit("updateImg", res.src);
+        // this.$router.go(0);
+        window.location.reload();
+      } else {
         this.$message({
-          type:'error',
-          message:res.msg
-        })
+          type: "error",
+          message: res.msg,
+        });
       }
       this.imageUrl = URL.createObjectURL(file.raw);
     },
@@ -100,8 +101,8 @@ export default {
     this.username = this.$store.state.user.user.username;
     // 获取token
     let token = this.$store.state.user.user.Token;
-    if (token !== undefined || token !==null) {
-      this.token=`Bearer ${token}`
+    if (token !== undefined || token !== null) {
+      this.token = `Bearer ${token}`;
     }
   },
   watch: {

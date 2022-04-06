@@ -52,32 +52,40 @@
           <!-- 具体商品内容 -->
           <div class="cartItem">
             <div class="item" v-for="(item, index) in selectData" :key="index">
-              <div class="name">{{ item.item.name }}</div>
-              <div class="price">
-                <p>
-                  <span>¥</span>
-                  <span>{{ item.item.price }}</span>
-                </p>
-              </div>
-              <div class="button">
-                <transition name="icrement">
-                  <div class="left">
-                    <!-- 减 - 以及数量显示 -->
-                    <button
-                      @click="icreItem(item.item)"
-                      ref="increBtn"
-                    ></button>
-                    <span>{{ item.counts }}</span>
-                  </div>
-                </transition>
-
-                <div class="right">
-                  <!-- 选择  +  的button -->
-                  <button
-                    ref="addBtn"
-                    @click="addItem(item.item, item.index)"
-                  ></button>
+              <div class="itemMsg">
+                <div class="name">{{ item.item.name }}</div>
+                <div class="price">
+                  <p>
+                    <span>¥</span>
+                    <span>{{ item.item.price }}</span>
+                  </p>
                 </div>
+                <div class="button">
+                  <transition name="icrement">
+                    <div class="left">
+                      <!-- 减 - 以及数量显示 -->
+                      <button
+                        @click="icreItem(item.item, item.index)"
+                        ref="increBtn"
+                      ></button>
+                      <span>{{ item.counts }}</span>
+                    </div>
+                  </transition>
+
+                  <div class="right">
+                    <!-- 选择  +  的button -->
+                    <button
+                      ref="addBtn"
+                      @click="addItem(item.item, item.index)"
+                    ></button>
+                  </div>
+                </div>
+              </div>
+              <!-- 标签总类 代表选择的规格 -->
+              <div v-if="!item.item.is_meal" class="tips">
+                  <span class="tip" v-for="(property,index) in item.item.classify_detail.type_keys" :key="index">
+                    {{property.type_key_value}}
+                  </span>
               </div>
             </div>
           </div>
@@ -108,10 +116,10 @@ export default {
         return 10;
       },
     },
-    storeId:{
-      type:String,
-      require:true
-    }
+    storeId: {
+      type: String,
+      require: true,
+    },
   },
   data() {
     return {
@@ -123,14 +131,14 @@ export default {
   created() {
     this.grap = this.de_condition;
   },
-  beforeDestroy(){
+  beforeDestroy() {
     //判断由两个组成
     // 1.本组件购物车是否有数据
     // 2.vuex中购物车是否存在本购物车数据
-    if(this.selectData.length !==0){
-      this.$emit('cachShoppingCart');
-    }else{
-      this.$emit('cachShoppingCart',[]);
+    if (this.selectData.length !== 0) {
+      this.$emit("cachShoppingCart");
+    } else {
+      this.$emit("cachShoppingCart", []);
     }
   },
   methods: {
@@ -142,32 +150,42 @@ export default {
     },
     // 购物车中增加物品
     addItem(item, index) {
-      this.$emit("selectShops", item, index);
+      // console.log(item);
+      if (item.is_meal === 1) {
+        //该商品为不能选择规格的商品
+        this.$emit("selectShops", item, index);
+      } else {
+        this.$emit("selectSpecificationShops", item, null, index);
+      }
     },
     //购物车删除物品
-    icreItem(item) {
-      this.$emit("delShops", item);
+    icreItem(item, index) {
+      if (item.is_meal === 1) {
+        //该商品为不能选择规格的商品
+        this.$emit("delShops", item);
+      } else {
+        this.$emit("delSpecificationShops", item, index);
+      }
     },
     // 清空
     clearCarts() {
-      // 直接把购物车中每一个按钮都触发掉
       this.$emit("clearCarts");
     },
     //下订单
     doOrder() {
       let token = sessionStorage.getItem("Token");
       if (token === null) {
-        if(confirm('请先登录')){
+        if (confirm("请先登录")) {
           this.$router.replace({
-            name:'login'
+            name: "login",
           });
         }
       } else {
         this.$router.push({
           name: "TheOrder",
-          query:{
-            storeId:this.storeId
-          }
+          query: {
+            storeId: this.storeId,
+          },
         });
       }
     },
@@ -383,104 +401,118 @@ div#ShoppingCart {
         overflow-y: auto;
         background-color: white;
         & > div.item {
-          display: flex;
           padding: 32px 23px;
 
-          & > div.name {
-            flex: 4;
-            font-weight: 700;
-            font-size: 32px;
-            color: #666;
-          }
-          & > div.price {
-            flex: 1;
+          & > div.itemMsg {
             display: flex;
-            flex-direction: column;
-            justify-content: center;
-            & > p {
-              padding: 0;
-              margin: 0;
-              & > span {
-                color: #f60;
+
+            & > div.name {
+              flex: 4;
+              font-weight: 700;
+              font-size: 32px;
+              color: #666;
+            }
+            & > div.price {
+              flex: 1;
+              display: flex;
+              flex-direction: column;
+              justify-content: center;
+              & > p {
+                padding: 0;
+                margin: 0;
+                & > span {
+                  color: #f60;
+                }
+                span:nth-child(1) {
+                  font-size: 25px;
+                }
+                span:nth-child(2) {
+                  font-weight: 700;
+                  font-size: 32px;
+                }
               }
-              span:nth-child(1) {
-                font-size: 25px;
+            }
+            & > div.button {
+              flex: 2;
+              display: inline-flex;
+              box-sizing: content-box;
+              justify-content: flex-end;
+              & > div.left {
+                display: flex;
+                align-items: flex-end;
+                & > button {
+                  position: relative;
+                  display: inline-block;
+                  width: 40px;
+                  height: 40px;
+                  outline: none;
+                  border: 3px solid #3190e8;
+                  border-radius: 100%;
+                  background-color: #fff;
+
+                  &::before {
+                    content: "";
+                    position: absolute;
+                    width: 65%;
+                    height: 10%;
+                    background-color: #3190e8;
+                    top: 50%;
+                    left: 50%;
+                    transform: translate(-50%, -50%);
+                  }
+                }
+                & > span {
+                  font-size: 35px;
+                  line-height: 40px;
+                  margin: 0 20px;
+                }
               }
-              span:nth-child(2) {
-                font-weight: 700;
-                font-size: 32px;
+              & > div.right {
+                display: flex;
+                align-items: flex-end;
+                & > button {
+                  position: relative;
+                  display: inline-block;
+                  width: 40px;
+                  height: 40px;
+                  outline: none;
+                  border: 1px solid transparent;
+                  border-radius: 100%;
+                  background-color: #3190e8;
+
+                  &::before {
+                    content: "";
+                    position: absolute;
+                    width: 65%;
+                    height: 10%;
+                    background-color: #fff;
+                    top: 50%;
+                    left: 50%;
+                    transform: translate(-50%, -50%);
+                  }
+                  &::after {
+                    content: "";
+                    position: absolute;
+                    width: 10%;
+                    height: 65%;
+                    background-color: #fff;
+                    top: 50%;
+                    left: 50%;
+                    transform: translate(-50%, -50%);
+                  }
+                }
               }
             }
           }
-          & > div.button {
-            flex: 2;
-            display: inline-flex;
-            box-sizing: content-box;
-            justify-content: flex-end;
-            & > div.left {
-              display: flex;
-              align-items: flex-end;
-              & > button {
-                position: relative;
-                display: inline-block;
-                width: 40px;
-                height: 40px;
-                outline: none;
-                border: 3px solid #3190e8;
-                border-radius: 100%;
-                background-color: #fff;
+          & > div.tips{
+            margin: 10px 0 ;
+            & > span.tip{
+              border: 1px solid #666;
+              color: #333;
+              margin: 0 5px;
+              padding: 0 10px;
+              border-radius: 50px;
 
-                &::before {
-                  content: "";
-                  position: absolute;
-                  width: 65%;
-                  height: 10%;
-                  background-color: #3190e8;
-                  top: 50%;
-                  left: 50%;
-                  transform: translate(-50%, -50%);
-                }
-              }
-              & > span {
-                font-size: 35px;
-                line-height: 40px;
-                margin: 0 20px;
-              }
-            }
-            & > div.right {
-              display: flex;
-              align-items: flex-end;
-              & > button {
-                position: relative;
-                display: inline-block;
-                width: 40px;
-                height: 40px;
-                outline: none;
-                border: 1px solid transparent;
-                border-radius: 100%;
-                background-color: #3190e8;
-
-                &::before {
-                  content: "";
-                  position: absolute;
-                  width: 65%;
-                  height: 10%;
-                  background-color: #fff;
-                  top: 50%;
-                  left: 50%;
-                  transform: translate(-50%, -50%);
-                }
-                &::after {
-                  content: "";
-                  position: absolute;
-                  width: 10%;
-                  height: 65%;
-                  background-color: #fff;
-                  top: 50%;
-                  left: 50%;
-                  transform: translate(-50%, -50%);
-                }
-              }
             }
           }
         }

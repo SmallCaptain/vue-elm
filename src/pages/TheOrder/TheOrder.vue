@@ -3,8 +3,8 @@
     <el-header>
       <Header :fucName="fucName"></Header>
     </el-header>
-    <el-main>
-      <section>
+    <el-main :class="{showChageAddress:showChageAddress}">
+      <section ref="main" @touchmove="moving">
         <!--收货地址-->
         <div class="reciveAddress">
           <sure-address
@@ -40,8 +40,8 @@
     </el-main>
     <el-footer>
       <!-- 确认订单 -->
-      <div class="orderForm">
-        <order-form :merchant="merchantMessage" />
+      <div  class="orderForm">
+        <order-form :address="address" :merchant="merchantMessage" />
       </div>
     </el-footer>
   </el-container>
@@ -157,11 +157,16 @@ export default {
       this.address = this.reciveAddress[index];
       this.chageAddressShow();
     },
+    moving(){
+      console.log('scroll');
+    }
+
   },
   created() {
     //请求数据
     this.sendRequest();
   },
+
   beforeRouteEnter(to, from, next) {
     let token = sessionStorage.getItem("Token");
     if (!token) {
@@ -181,7 +186,6 @@ export default {
   }
   & > .el-main {
     position: relative;
-    z-index: 25;
     padding: 0;
     margin-bottom: 107px;
     & > section {
@@ -210,5 +214,12 @@ export default {
     height: auto !important;
     padding: 0;
   }
+}
+.showChageAddress{
+  position: fixed !important;
+  left: 0px !important;
+  top: 90px !important;
+  width: 100vw !important;
+  z-index: 25;
 }
 </style>

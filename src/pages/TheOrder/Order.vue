@@ -10,19 +10,32 @@
       </div>
       <ul class="list">
         <li class="item" v-for="(item, index) in shoppingCart" :key="index">
-          <span class="shopName">{{ item.item.name }}</span>
-          <div class="value">
-            <span class="amounts">x{{ item.counts }}</span>
-            <span class="price">￥{{ item.counts * item.item.price }}</span>
+          <div class="content">
+            <span class="shopName">{{ item.item.name }}</span>
+            <div class="value">
+              <span class="amounts">x{{ item.counts }}</span>
+              <span class="price">￥{{ item.counts * item.item.price }}</span>
+            </div>
+          </div>
+          <div v-if="item.item.is_meal === 0" class="tips">
+            <span
+              v-for="(property, index) in item.item.classify_detail.type_keys"
+              :key="index"
+              class="tip"
+            >
+              {{ property.type_key_value }}
+            </span>
           </div>
         </li>
 
         <!-- 配送费 无需循环生成 -->
         <li class="item">
-          <span class="shopName">配送费</span>
-          <div class="value">
-            <span class="amounts"></span>
-            <span class="price">￥{{ merchant.shipping_fee }}</span>
+          <div class="content">
+            <span class="shopName">配送费</span>
+            <div class="value">
+              <span class="amounts"></span>
+              <span class="price">￥{{ merchant.shipping_fee }}</span>
+            </div>
           </div>
         </li>
       </ul>
@@ -30,12 +43,12 @@
       <div class="total">
         <div class="title">
           <span class="title">订单</span>
-          <span class="price">￥{{getTotalPrice}}</span>
+          <span class="price">￥{{ getTotalPrice }}</span>
         </div>
         <!-- 总和价格 -->
         <div class="value">
           <span class="title">待支付</span>
-          <span class="price">￥{{getTotalPrice}}</span>
+          <span class="price">￥{{ getTotalPrice }}</span>
         </div>
       </div>
     </div>
@@ -64,15 +77,15 @@ export default {
     };
   },
   computed: {
-    getTotalPrice(){
+    getTotalPrice() {
       let total = 0;
 
-      this.shoppingCart.forEach(item=>{
+      this.shoppingCart.forEach((item) => {
         total += item.counts * item.item.price;
-      })
-      total +=this.merchantData.shipping_fee;
+      });
+      total += this.merchantData.shipping_fee;
       return total;
-    }
+    },
   },
   methods: {
     //vuex中获取所有购物车数据
@@ -141,25 +154,36 @@ div#Order {
 
       border-bottom: 1px solid #f5f5f5;
       & > li.item {
-        display: flex;
-        justify-content: space-between;
         font-size: 26px;
         color: #666666;
         padding: 15px 0px;
         margin-top: 31px;
 
-        & > span.shopName{
-          flex: 3;
-        }
-        & > div.value {
+        & > div.content {
           display: flex;
           justify-content: space-between;
-          flex: 1;
-          & > span.amounts {
-            letter-spacing: 10px;
+          & > span.shopName {
+            flex: 3;
           }
-          & > span.price {
-            color: #ff6600;
+          & > div.value {
+            display: flex;
+            justify-content: space-between;
+            flex: 1;
+            & > span.amounts {
+              letter-spacing: 10px;
+            }
+            & > span.price {
+              color: #ff6600;
+            }
+          }
+        }
+        & > div.tips {
+          margin: 5px 0 0 0;
+          & > span.tip {
+            border: 1px solid #666;
+            border-radius: 50px;
+            padding: 0 10px;
+            margin: 0 5px;
           }
         }
       }

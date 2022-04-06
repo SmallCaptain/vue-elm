@@ -38,6 +38,7 @@
                 <transition name="icrement">
                   <div class="left" v-show="selecteds[index] !== 0">
                     <!-- 减 - 以及数量显示 -->
+                    <!--  :disabled="!item.is_meal" -->
                     <button ref="increBtn" @click="increItem(index)"></button>
                     <span>{{ selecteds[index] }}</span>
                   </div>
@@ -52,7 +53,11 @@
                     @click="addItem(index)"
                   ></button>
                   <!-- 规格 button -->
-                  <button class="selectSize" v-show="!item.is_meal">
+                  <button
+                    @click="selectProperty(index)"
+                    class="selectSize"
+                    v-show="!item.is_meal"
+                  >
                     选规格
                   </button>
                 </div>
@@ -62,11 +67,23 @@
         </div>
       </li>
     </ul>
+    <!-- 第三个部分 隐藏的规格选择 某些商品不支持规格选择 -->
+    <div class="selectProperty">
+      <!-- :item="datas.items[propertyIndex]" -->
+      <merchant-item-attribute
+        :isSelectProperty="isSelectProperty"
+        :item="datas.items[propertyIndex]"
+        @cancel="cancel"
+        @addSpecification="addSpecification"
+      />
+    </div>
   </div>
 </template>
 
 <script>
+import MerchantItemAttribute from "./MerchantItemAttribute.vue";
 export default {
+  components: { MerchantItemAttribute },
   name: "MerchantItem",
   props: {
     datas: {
@@ -98,19 +115,32 @@ export default {
     },
   },
   methods: {
+    //挑选商品
     addItem(index) {
-      //挑选商品
       this.isButtonOn = true;
       this.selecteds[index]++;
       this.$emit("selectShops", this.datas.items[index], index);
       this.$forceUpdate();
     },
-    increItem(index) {
+    //增加规格商品
+    addSpecification(item, detail) {
+      let index = this.propertyIndex;
       this.isButtonOn = true;
+      this.selecteds[index]++;
 
-      this.selecteds[index] === 0 ? 0 : this.selecteds[index]--;
-      this.$emit("delShops", this.datas.items[index]);
-      this.$forceUpdate();
+      this.$emit("selectSpecificationShops", item, detail, index);
+    },
+    //减少商品
+    increItem(index) {
+      if (this.datas.items[index].is_meal !== 0) {
+        this.isButtonOn = true;
+
+        this.selecteds[index] === 0 ? 0 : this.selecteds[index]--;
+        this.$emit("delShops", this.datas.items[index]);
+        this.$forceUpdate();
+      } else {
+        confirm("选择规格商品请去购物车中删除");
+      }
     },
     //初始化 selecteds
     initSelecteds() {
@@ -124,6 +154,35 @@ export default {
         this.selecteds = newArray;
       }
     },
+    // 选择商品属性
+    selectProperty(index) {
+      this.propertyIndex = index;
+      this.isSelectProperty = true;
+    },
+    //取消选择规格
+    cancel() {
+      this.isSelectProperty = false;
+    },
+    // 判断规格商品里的数据是否一致
+    judgeSpecification(newItem, oldItem) {
+      // newItem 表示新添加的数据 oldItem 表示要与之比对的数据
+      let flag = true; //默认完全一致 不同时变为false
+      let newKeys = newItem.classify_detail.type_keys;
+      let oldKeys = oldItem.classify_detail.type_keys;
+
+      /*
+        console.log("@newKeys:", newKeys);
+        console.log("@oldKeys:", oldKeys);
+      */
+      for (let i = 0; i < newKeys.length; i++) {
+        if (newKeys[i].type_key_value !== oldKeys[i].type_key_value) {
+          flag = false;
+          break;
+        }
+      }
+
+      return flag;
+    },
   },
 
   data() {
@@ -132,6 +191,10 @@ export default {
       selecteds: [],
       //代表增加商品 删除商品 是否是由本组件触发 而非购物车 默认为购物车
       isButtonOn: false,
+      // 是否显示选择规格
+      isSelectProperty: false,
+      //代表当前规格商品的index
+      propertyIndex: 0,
     };
   },
   computed: {
@@ -156,39 +219,94 @@ export default {
           } else {
             if (!this.isButtonOn) {
               //购物车触发时
-              if (newValue < oldValue) {
+              if (newValue.length < oldValue.length) {
                 //差距只有1 说明有单个商品归为0
+                // console.log("newvalue.length < oldvalue.length");
+
                 let id = null; //商品id 挑选出没有的
                 let type = null;
                 let index = 0;
+                let rI = 0;
                 for (let i = 0; i < oldValue.length; i++) {
                   let findFlag = false; //默认没找到
 
                   for (let j = 0; j < newValue.length; j++) {
                     if (
-                      oldValue[i].item.id === newValue[j].item.id &&
-                      oldValue[i].item.type === newValue[j].item.type
+                      oldValue[i].item.is_meal === 1 &&
+                      newValue[j].item.is_meal === 1
                     ) {
-                      findFlag = true;
-                      break;
+                      //两者都是非规格商品
+                      //非规格商品时的判断
+                      if (
+                        oldValue[i].item.id === newValue[j].item.id &&
+                        oldValue[i].item.type === newValue[j].item.type
+                      ) {
+                        findFlag = true;
+                        break;
+                      }
+                    } else {
+                      //两个都是规格商品
+                      //规格商品时的判断
+                      if (
+                        oldValue[i].item.id === newValue[j].item.id &&
+                        oldValue[i].item.type === newValue[j].item.type
+                      ) {
+                        //同类商品
+                        let flag = this.judgeSpecification(
+                          oldValue[i].item,
+                          newValue[j].item
+                        );
+                        if (!flag) {
+                          //同类 but 规格不一样
+                          findFlag = false;
+                        } else {
+                          // 同类 规格一样 说明 没删
+                          findFlag = true;
+                          break;
+                        }
+                      }
                     }
                   }
+                  // console.log("@findFlag:", findFlag);
                   if (!findFlag) {
                     //说明被删的 就是这个
+                    rI = i;
                     id = oldValue[i].item.id;
                     type = oldValue[i].item.type;
                     index = oldValue[i].index;
                     break;
                   }
                 }
+                // console.log(id);
+                // console.log(oldValue[rI]);
                 if (id !== null && type === this.datas.name) {
                   //查找到了已经删掉的那个商品 并且它的分类是属于本组的
-                  this.selecteds[index] = 0;
-                  this.$forceUpdate();
+                  if (oldValue[rI].item.is_meal !== 0) {
+                    // 非规格商品 不会出现同类不同规格的情况
+                    // console.log(newValue[rI].item.is_meal);
+
+                    this.selecteds[index] = 0;
+                    this.$forceUpdate();
+                  } else {
+                    // console.log("123");
+                    //规格商品 可能存在 不同规格的同类商品
+                    let counts = 0;
+                    for (let i = 0; i < newValue.length; i++) {
+                      if (
+                        newValue[i].item.type === oldValue[rI].item.type &&
+                        newValue[i].index === oldValue[rI].index
+                      ) {
+                        counts += newValue[i].counts;
+                      }
+                    }
+                    this.selecteds[index] = counts;
+                    this.$forceUpdate();
+                  }
                 }
               } else if (newValue.length === oldValue.length) {
                 //反之 这里不可能出现 > 的情况 只有等于的情况
                 //该情况下 需要检测 到底是哪一个数据发生了变化
+                // console.log("newvalue.length === oldvalue.length");
 
                 let id = null; //商品id
                 let type = null;
@@ -198,14 +316,47 @@ export default {
                   let findFlag = false; //默认没找到
 
                   for (let j = 0; j < newValue.length; j++) {
-                    if (oldValue[i].item.type === newValue[j].item.type) {
-                      //同种类型
-                      if (oldValue[i].item.id === newValue[j].item.id) {
-                        //商品一致
-                        if (oldValue[i].counts !== newValue[j].counts) {
-                          // 数量发生改变
-                          findFlag = true;
-                          break;
+                    if (
+                      oldValue[i].item.is_meal === 1 &&
+                      newValue[j].item.is_meal === 1
+                    ) {
+                      //说明 都是非规格数据
+                      if (oldValue[i].item.type === newValue[j].item.type) {
+                        //同种类型
+                        if (oldValue[i].item.id === newValue[j].item.id) {
+                          //商品一致
+                          if (oldValue[i].counts !== newValue[j].counts) {
+                            // 数量发生改变
+                            findFlag = true;
+                            rI = j;
+
+                            break;
+                          }
+                        }
+                      }
+                    } else if (
+                      oldValue[i].item.is_meal === 0 &&
+                      newValue[j].item.is_meal === 0
+                    ) {
+                      //规格商品 额外 增加判断规格条件
+                      if (oldValue[i].item.type === newValue[j].item.type) {
+                        //同种类型
+                        if (oldValue[i].item.id === newValue[j].item.id) {
+                          //商品一致
+                          if (
+                            this.judgeSpecification(
+                              oldValue[i].item,
+                              newValue[j].item
+                            )
+                          ) {
+                            if (oldValue[i].counts !== newValue[j].counts) {
+                              // 数量发生改变
+                              findFlag = true;
+                              rI = j;
+
+                              break;
+                            }
+                          }
                         }
                       }
                     }
@@ -215,15 +366,31 @@ export default {
                     id = oldValue[i].item.id;
                     type = oldValue[i].item.type;
                     index = oldValue[i].index;
-                    rI = i;
                     break;
                   }
                 }
-
                 if (id !== null && type === this.datas.name) {
                   //查找到了数量发生了变化的那个商品 并且它的分类是属于本组的
-                  this.selecteds[index] = newValue[rI].counts;
-                  this.$forceUpdate();
+                  if (newValue[rI].item.is_meal !== 0) {
+                    // 非规格商品 不会出现同类不同规格的情况
+                    // console.log(newValue[rI].item.is_meal);
+
+                    this.selecteds[index] = newValue[rI].counts;
+                    this.$forceUpdate();
+                  } else {
+                    //规格商品 可能存在 不同规格的同类商品
+                    let counts = 0;
+                    for (let i = 0; i < newValue.length; i++) {
+                      if (
+                        newValue[i].item.type === newValue[rI].item.type &&
+                        newValue[i].index === newValue[rI].index
+                      ) {
+                        counts += newValue[i].counts;
+                      }
+                    }
+                    this.selecteds[index] = counts;
+                    this.$forceUpdate();
+                  }
                 }
               }
             }
@@ -449,6 +616,8 @@ div.item {
                   }
                 }
                 & > button.selectSize {
+                  position: relative;
+                  z-index: 0;
                   display: inline-block;
                   box-sizing: content-box;
                   font-size: 25px;
@@ -465,6 +634,8 @@ div.item {
         }
       }
     }
+  }
+  & > div.selectProperty {
   }
 }
 .icrement-enter-active {

@@ -25,6 +25,7 @@
         @selectShops="selectShops"
         @delShops="delShops"
         :selectData="selectData"
+        @selectSpecificationShops="selectSpecificationShops"
       />
     </div>
     <!-- //购物车 -->
@@ -37,7 +38,9 @@
         @clearCarts="clearCarts"
         :shippingFee="itemObj.shipping_fee"
         :de_condition="itemObj.de_conditions"
-        :storeId = "storeId"
+        :storeId="storeId"
+        @selectSpecificationShops="selectSpecificationShops"
+        @delSpecificationShops="delSpecificationShops"
       />
     </footer>
   </div>
@@ -159,6 +162,85 @@ export default {
         }
       }
     },
+    // 选择规格商品 意为 增加有规格选项商品时才触发的方法
+    selectSpecificationShops(item, detail = null, index) {
+      //注意规格不同 和 规格一样的商品（这个也可以算作同种
+      //通过propertyIndex 可以判断是那个规格商品 也就是index
+      //购物车中如果存在 index 相同的数据 且 type 也一致 那么再进行判断规格是否完全一致
+      let shoppingCart = this.selectData;
+      let obj = JSON.parse(JSON.stringify(item));
+      obj.classify_detail = detail === null?obj.classify_detail:detail;
+      let isExist = false; //判断购物车中商品是否已存在 true 存在 false 不存在
+      /*
+        console.log("@item:", obj);
+        console.log("@index:", index);
+        console.log("@shoppingCart:", shoppingCart);
+      */
+
+      for (let i = 0; i < shoppingCart.length; i++) {
+        if (
+          shoppingCart[i].item.type === obj.type &&
+          shoppingCart[i].index === index
+        ) {
+          //分类与规格商品索引都一样
+          // 还需判断规格是否都一致性
+          let flag = this.judgeSpecification(obj, shoppingCart[i].item);
+          if (flag) {
+            //同类商品 但规格选择不同
+            //表明一致 跳出 无须查找了
+            //并且将该数据 counts ++
+            let typeIndex = this.findTypeIndex(obj.type);
+            // this.$set(shoppingCart,i,itemObj);
+            shoppingCart[i].counts++;
+            this.itemData[typeIndex].counts++;
+            isExist = true;
+            break;
+          } else {
+            //不跳出 继续查找 后续可能存在规格一致的商品
+            isExist = false;
+          }
+        }
+      }
+      if (!isExist) {
+        //商品不存在
+        let cartObj = {
+          counts: 1,
+          index,
+          item: obj,
+        };
+        let typeIndex = this.findTypeIndex(obj.type);
+        this.itemData[typeIndex].counts++;
+        this.selectData.push(cartObj);
+      }
+    },
+    // 判断规格商品里的数据是否一致
+    judgeSpecification(newItem, oldItem) {
+      // newItem 表示新添加的数据 oldItem 表示要与之比对的数据
+      let flag = true; //默认完全一致 不同时变为false
+      let newKeys = newItem.classify_detail.type_keys;
+      let oldKeys = oldItem.classify_detail.type_keys;
+
+      /*
+        console.log("@newKeys:", newKeys);
+        console.log("@oldKeys:", oldKeys);
+      */
+      for (let i = 0; i < newKeys.length; i++) {
+        if (newKeys[i].type_key_value !== oldKeys[i].type_key_value) {
+          flag = false;
+          break;
+        }
+      }
+
+      return flag;
+    },
+    //findTypeIndex 查找商品在itemData属于哪一分类的索引
+    findTypeIndex(type) {
+      let reIndex = 0;
+      for (let i = 0; i < this.itemData.length; i++) {
+        if (this.itemData[i].name === type) reIndex = i;
+      }
+      return reIndex;
+    },
     //删除商品 意为 把已选择的商品去除
     delShops(obj) {
       let flag = false;
@@ -197,6 +279,45 @@ export default {
             this.$set(this.itemData, i, copy);
           }
         }
+      }
+    },
+    // 删除规格商品 从购物车中 删除对应的规格商品
+    delSpecificationShops(item,index){
+      // 判断条件
+      // 1.item的type 与购物车中的type是否一致
+      // 2.item的index 与购物车中index是否一致
+      // 3.满足 1 与 2 条件时 判断规格是否完全一致
+      // 4.满足 1 与 2 与 3条件时 判断counts大小 === 1 则删除 >1 则counts减少1;
+      let cartShops = this.selectData;
+      let isExist = -1;
+      /*
+      console.log('@cartShops:',cartShops);
+      console.log('@item:',item);
+      console.log('@index:',index);
+      */
+      for(let i = 0 ;i < cartShops.length; i++){
+        if(cartShops[i].item.type === item.type && cartShops[i].index === index){
+          // 分类与索引都一致 表明存在 而后 再进行规格判断
+          let flag = this.judgeSpecification(item,cartShops[i].item);
+          if(flag){
+            // 为真时 表明找到相同规格的商品 情况为判断条件4
+            // 缓存位置后 剪枝跳出
+            isExist = i;
+            break;
+          }          
+        }
+      }
+      if(isExist > -1){
+        //意味着找到本次要删除商品在购物车中的位置 情况为判断条件4
+        let typeIndex = this.findTypeIndex(item.type);
+        // 判断counts大小 
+        if(cartShops[isExist].counts > 1){
+          cartShops[isExist].counts--;
+        }else{
+          cartShops[isExist].counts--;
+          cartShops.splice(isExist,1);
+        }
+        this.itemData[typeIndex].counts--;
       }
     },
     // 清空购物车
@@ -266,10 +387,9 @@ export default {
           }
         }
         // console.log(shoppingCart[index]);
-        if (index !== -1){
+        if (index !== -1) {
           this.selectData = shoppingCart[index].data;
-        }else
-          return;
+        } else return;
 
         //与此同时 初始化 分类数据总量
         let newItemData = [];

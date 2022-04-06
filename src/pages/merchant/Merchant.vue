@@ -55,6 +55,8 @@ export default {
     padding: 0;
   }
   & > .el-main {
+    position: relative;
+    z-index: 16;
     padding: 0;
   }
 }
