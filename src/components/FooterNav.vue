@@ -39,7 +39,7 @@ export default {
         {
           name: "订单",
           icon: "el-icon-tickets",
-          pathName: "3",
+          pathName: "UserOrderList",
         },
         {
           name: "个人",

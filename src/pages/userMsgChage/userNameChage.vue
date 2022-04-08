@@ -57,6 +57,7 @@ export default {
               type: "success",
               message: result.data.msg,
             });
+            this.$store.dispatch('user/chageUserName',this.userName);
           } else {
             this.$message({
               type: "error",

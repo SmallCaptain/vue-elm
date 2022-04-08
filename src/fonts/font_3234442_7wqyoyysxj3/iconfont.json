@@ -6,6 +6,27 @@
   "description": "",
   "glyphs": [
     {
+      "icon_id": "824998",
+      "name": "选择",
+      "font_class": "xuanze",
+      "unicode": "e619",
+      "unicode_decimal": 58905
+    },
+    {
+      "icon_id": "8574949",
+      "name": "微信支付",
+      "font_class": "weixinzhifu",
+      "unicode": "e607",
+      "unicode_decimal": 58887
+    },
+    {
+      "icon_id": "15933089",
+      "name": "支付宝",
+      "font_class": "zhifubao",
+      "unicode": "e608",
+      "unicode_decimal": 58888
+    },
+    {
       "icon_id": "16563867",
       "name": "修改、修改资料",
       "font_class": "cangpeitubiao_xiugaixiugaiziliao",

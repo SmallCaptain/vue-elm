@@ -13,18 +13,24 @@ const routerOptions = {
             path: '/home',
             component: () => import('../components/Home.vue'),
             children: [{
-                name: 'personal',
-                path: 'personal',
-                component: () => import('../pages/personalPage/personalPage.vue')
-            }, { //外卖页
-                name: 'takeout',
-                path: 'takeout',
-                component: () => import('../pages/TakeOut/TakeOut.vue')
-            }, { //搜索页
-                name: 'SearchMerchants',
-                path: 'SearchMerchants',
-                component: () => import('../pages/SearchMerchants/SearchMerchants.vue')
-            }]
+                    name: 'personal',
+                    path: 'personal',
+                    component: () => import('../pages/personalPage/personalPage.vue')
+                }, { //外卖页
+                    name: 'takeout',
+                    path: 'takeout',
+                    component: () => import('../pages/TakeOut/TakeOut.vue')
+                }, { //搜索页
+                    name: 'SearchMerchants',
+                    path: 'SearchMerchants',
+                    component: () => import('../pages/SearchMerchants/SearchMerchants.vue')
+                }, //订单列表页
+                {
+                    name: 'UserOrderList',
+                    path: 'UserOrderList',
+                    component: () => import('../pages/UserOrderList/UserOrderList.vue')
+                }
+            ]
         }, {
             //登录
             name: 'login',
@@ -93,27 +99,43 @@ const routerOptions = {
                     itemObj: item
                 };
             }
-        },//商家分类页面
+        }, //商家分类页面
         {
-            name:'GoodsCategory',
-            path:'/GoodsCategory',
-            component:() =>import('../pages/GoodsCategory/index.vue'),
-            props:(route) =>{
-                return{
-                    funcName:route.query.title
+            name: 'GoodsCategory',
+            path: '/GoodsCategory',
+            component: () => import('../pages/GoodsCategory/index.vue'),
+            props: (route) => {
+                return {
+                    funcName: route.query.title
                 }
             }
-        },//确定订单页面
+        }, //确定订单页面
         {
-            name:'TheOrder',
-            path:'/TheOrder',
-            component:()=>import('../pages/TheOrder/TheOrder.vue'),
+            name: 'TheOrder',
+            path: '/TheOrder',
+            component: () => import('../pages/TheOrder/TheOrder.vue'),
+            props: (route) => {
+                return {
+                    storeId: route.query.storeId
+                }
+            }
+        },
+        { //在线支付
+            name: 'OnlinePayment',
+            path: '/OnlinePayment',
+            component: () => import('../pages/OnlinePayment/OnlinePayment.vue'),
             props:(route)=>{
                 return{
-                    storeId:route.query.storeId
+                    orderId: route.query.orderId
                 }
             }
+        },{
+            //订单详情
+            name:'UserOrderDetail',
+            path:'/UserOrderDetail',
+            component:()=> import('../pages/UserOrderDetail/UserOrderDetail.vue')
         }
+
     ]
 }
 

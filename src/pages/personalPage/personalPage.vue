@@ -53,7 +53,7 @@ export default {
         {
           icon: "el-icon-tickets",
           funcName: "我的订单",
-          pathName: "",
+          pathName: "UserOrderList",
           color: "rgb(102, 102, 102)",
         },
         {

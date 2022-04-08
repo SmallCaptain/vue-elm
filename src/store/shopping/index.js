@@ -5,6 +5,18 @@ const option = {
         // addShopping 往 购物车数据中 添加数据 为obj
         addShopping(content,data){
             content.commit('addShopping',data);
+        },
+        // 改变收货地址
+        chageAddress(content,data){
+            content.commit('chageAddress',data);
+        },
+        //改变本轮订单的商家id 代表本轮订单是哪一家商家
+        chageStoreId(content,data){
+            content.commit('chageStoreId',data)
+        },
+        //修改order详情数据
+        chageOrderDetail(content,data){
+            content.commit('chageOrderDetail',data)
         }
     },
     // 数据修改层 
@@ -23,11 +35,34 @@ const option = {
             }else{
                 state.shoppingCart.push(data);
             }
+        },
+        chageAddress(state,data){
+            state.address = data;
+        },
+        chageStoreId(state,data){
+            //赋予商家id
+            state.storeId = data
+            //根据商家id 从购物车挑选出数据
+            let order = [];
+            for(let obj of state.shoppingCart){
+                if (obj.storeId === data) {
+                    order = obj;
+                    break;
+                }
+            }
+            state.order = order;
+        },
+        chageOrderDetail(state,data){
+           state.order_detail = data;
         }
     },
     //数据存储层
     state:{
-        shoppingCart:[]
+        shoppingCart:[],
+        address:{},
+        storeId:'defalut',
+        order:[],//本次订单的商品
+        order_detail:{}//查看详情的商品信息
     },
     //派生层 指定函数 完成某些数据过滤
     getters:{

@@ -61,7 +61,11 @@ export default {
     //下单
     doOrder(){
         if(this.address !== undefined){
-            console.log('ok');
+            this.$store.dispatch('shopping/chageStoreId',this.merchant.id)
+            this.$store.dispatch('shopping/chageAddress',this.address);
+            this.$router.push({
+              name:'OnlinePayment'
+            });
         }else{
           confirm('请先选择收货地址');
         }

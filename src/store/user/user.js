@@ -5,12 +5,20 @@ const option = {
     actions: {
         setUser(content,user) {
             content.commit('setUser',user);
+        },
+        chageUserName(content,username){
+            content.commit('chageUserName',username);
         }
     },
     // 数据修改层 
     mutations: {
         setUser(state,user){
             state.user=user;
+        },
+        chageUserName(state,username){
+           let user = state.user;
+           user.username=username;
+           state.user = user;
         }
     },
     //数据存储层

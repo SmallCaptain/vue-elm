@@ -11,19 +11,19 @@ export default {
 </script>
 
 <style lang="less" scoped>
-.fade-enter,
-.fade-leave-to {
-  opacity: 0;
-}
-.fade-enter-to,
-.fade-leave {
-  opacity: 1;
-}
 .fade-enter-active {
   transition: all 0.5s;
+  animation: fadeIn 0.5s linear;
 }
 .fade-leave-active {
   display: none;
-  transition: all 0.5s;
+}
+@keyframes fadeIn {
+  0%{
+    opacity: 0;
+  }
+  100%{
+    opacity: 1;
+  }
 }
 </style>
