@@ -7,7 +7,7 @@
         <div class="img">
           <el-upload
             class="avatar-uploader"
-            action="http://localhost:5115/user/chageAvatar"
+            action="http://124.222.90.62:5115/user/chageAvatar"
             :show-file-list="false"
             :on-success="handleAvatarSuccess"
             :before-upload="beforeAvatarUpload"

@@ -99,13 +99,13 @@ export default {
             .get("v1/cities?type=guess")
             .then((result) => {
               // alert(JSON.stringify(result.data));
-              console.log("@result", result);
+              // console.log("@result", result);
               resolve(result.data);
             })
             .catch((err) => {
               console.log("@error", err);
-              alert(err);
-              alert("定位炸啦！");
+              // alert(err);
+              // alert("定位炸啦！");
               reject(undefined);
             });
         });
@@ -116,7 +116,7 @@ export default {
               this.$axiosP
                 .get("v1/cities?type=guess")
                 .then((result) => {
-                  console.log("@result", result);
+                  // console.log("@result", result);
                   resolve(result.data);
                 })
                 .catch((err) => {

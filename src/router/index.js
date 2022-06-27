@@ -4,7 +4,7 @@ import Vue from 'vue';
 Vue.use(VueRouter);
 
 const routerOptions = {
-    mode: 'history',
+    mode: 'hash',
     routes: [{
             path: '/',
             redirect: '/home/personal'

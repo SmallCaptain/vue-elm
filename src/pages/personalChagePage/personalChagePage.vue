@@ -22,7 +22,7 @@
           </template>
         </jump-to-func>
       </div>
-      <el-button type="danger">退出登录</el-button>
+      <el-button @click="logOut" type="danger">退出登录</el-button>
     </el-main>
   </el-container>
 </template>
@@ -74,9 +74,20 @@ export default {
           console.log(err);
         });
     },
-    updateImg(src){
-      this.$set(this.user,'img',src)
-    }
+    updateImg(src) {
+      this.$set(this.user, "img", src);
+    },
+    logOut() {
+      this.$store.dispatch("user/setUser", {
+        username: "",
+        isLogin: false,
+        Token: null,
+      });
+      sessionStorage.removeItem('Token');
+      this.$router.push({
+        path:'/'
+      });
+    },
   },
 };
 </script>

@@ -9,7 +9,7 @@
         <div class="orderStateContent">
           <div class="img">
             <img
-              src="http://localhost:5115/public/images/defalu_store.jpg"
+              :src="orderMessage.img"
               alt=""
             />
           </div>
